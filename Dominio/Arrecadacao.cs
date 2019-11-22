@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Dominio
 {
-    class Arrecadacao
+    public class Arrecadacao
     {
         public int Id { get; set; }
         public int QtdParticipantes { get; set; }

@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using RedeSocial.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Banco;
 
 namespace RedeSocial
 {
