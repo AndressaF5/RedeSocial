@@ -12,6 +12,7 @@ namespace Dominio
         public DateTime Hora { get; set; }
         public string Categoria { get; set; }
         public string Descricao { get; set; }
+        public Endereco Endereco { get; set; }
 
         public static void ImprimirTipo()
         {
