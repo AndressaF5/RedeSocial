@@ -12,5 +12,10 @@ namespace RedeSocial.Data
             : base(options)
         {
         }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlServer("Server=servidoredesocial.database.windows.net;Database=RedeSocialDB;Trusted_Connection=True;");
+        }
     }
 }
