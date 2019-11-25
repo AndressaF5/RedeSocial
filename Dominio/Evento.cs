@@ -13,6 +13,7 @@ namespace Dominio
         public string Categoria { get; set; }
         public string Descricao { get; set; }
         public Endereco Endereco { get; set; }
+        public ICollection<UsuarioEvento> UsuarioEvento { get; set; }
 
         public static void ImprimirTipo()
         {
