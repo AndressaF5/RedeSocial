@@ -10,7 +10,7 @@ namespace Banco
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=servidoredesocial.database.windows.net;Database=RedeSocialDB;Trusted_Connection=True;");
+            optionsBuilder.UseSqlServer("Server=tcp:servidoredesocial.database.windows.net,1433;Initial Catalog=RedeSocialDB;Persist Security Info=False;User ID=adminredesocial;Password=R&des0(1a1;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
         }
 
         DbSet<Arrecadacao> Arrecadacoes { get; set; }
