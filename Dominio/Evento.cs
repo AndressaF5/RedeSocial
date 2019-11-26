@@ -22,7 +22,7 @@ namespace Dominio
 				    + "Categoria: %s \n" 
 				    + "Descrição: %s \n", 
 				    this.NomeAtividade, 
-				    this.DataAtividade, 
+				    this.Data, 
 			        this.Hora, 
 				    this.Categoria,
 				    this.Descricao
