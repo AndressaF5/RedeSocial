@@ -15,7 +15,7 @@ namespace RedeSocial.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=servidoredesocial.database.windows.net;Database=RedeSocialDB;Trusted_Connection=True;");
+            optionsBuilder.UseSqlServer("Server=tcp:trabalhos.database.windows.net,1433;Initial Catalog=infnettrabalhos;Persist Security Info=False;User ID=andressafsilva;Password=Porcoaranh@007;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
         }
     }
 }
