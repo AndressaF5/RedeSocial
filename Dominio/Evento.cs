@@ -13,7 +13,6 @@ namespace Dominio
         public string Categoria { get; set; }
         public string Descricao { get; set; }
         public Endereco Endereco { get; set; }
-<<<<<<< HEAD
         public ICollection<UsuarioEvento> UsuarioEvento { get; set; }
 	    
 	    public void divulgar() {
@@ -29,10 +28,8 @@ namespace Dominio
 				    this.Descricao
 				    );
 		}
-        
-=======
 
-        public void divulgar()
+        public void Divulgar()
         {
             Console.WriteLine("Nome da Atividade: %s \n"
                     + "Data: %s \n"
@@ -47,6 +44,5 @@ namespace Dominio
                     );
 
         }
->>>>>>> 7199ed76ed076aff7a74aa678933aff4a330be1d
     }
 }
