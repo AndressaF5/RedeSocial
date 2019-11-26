@@ -13,18 +13,16 @@ namespace Dominio
         public int PublicoAlvo { get; set; }
 
 	    public void divulgar() {
-		    base(divulgar());
+		    base.divulgar();
 		    Console.WriteLine(":: Doações e Serviços ::\n "
 		    +"Quantidade de doadores:%d \n" 
 		    + "Quantidades de alimentos arrecadados até o momento: %.2f kg \n"
 		    + "Meta de arrecadação: %.2f\n"
-		    + "Publico alvo: %s\n"
-		    + "Quantidade de pessoas a receberem brinquedos/roupas: %.2f \n",
+		    + "Publico alvo: %s\n",
 		    this.QtdParticipantes,
-		    this.QtdAlimentos,
+		    this.QtdAlimento,
 		    this.MetaArrecadacao,
-		    this.PublicoAlvo,
-		    this.QtdAlimentos
+		    this.PublicoAlvo    
 		
 		    );
 	    }

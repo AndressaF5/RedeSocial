@@ -13,7 +13,7 @@ namespace Dominio
 
         
 	    public void divulgar() {
-		    base(divulgar());
+		    base.divulgar();
 		    Console.WriteLine(":: Dados da empresa ::\n"
 				    + "Nome da empresa: %s \n"
 				    + "Razao Social: %s \n"

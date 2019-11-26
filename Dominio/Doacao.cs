@@ -11,10 +11,10 @@ namespace Dominio
         public float MetaArrecadacao { get; set; }
         public float ValorArrecadado { get; set; }
 
-        private float calcularValorArrecadado(float ValorArrecadado, float ValorDoacao) {
-	        ValorArrecadado  = ValorArrecadado + ValorDoacao;
-	        return ValorArrecadado;
-	    }
+        private float calcularValorArrecadado() {
+	        var TotalArrecadado  = this.ValorArrecadado + this.ValorDoacao;
+	        return TotalArrecadado;
+        }
 	    public void verificarMeta() {
 		    if (calcularValorArrecadado() >= this.MetaArrecadacao ) {
 			    Console.WriteLine("Atingimos a meta! Nosso muito obrigado (a)!");
@@ -25,7 +25,7 @@ namespace Dominio
 	    }
 
 	    public void divulgar() {
-            base(divulgar());
+            base.divulgar();
 		    Console.WriteLine(":: Doação ::\n "
 				    + "Valor doação: %.2f"
 				    + "Meta de arrecadação: %.2f"

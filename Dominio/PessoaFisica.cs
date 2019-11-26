@@ -15,7 +15,7 @@ namespace Dominio
         public string Genero { get; set; }
 
        public void divulgar() {
-	        base(divulgar());
+	        base.divulgar();
 		    Console.WriteLine(":: Dados Pessoais ::\n"
 				    + "Nome: %s \n"
 				    + "Nome Social: %s \n"
