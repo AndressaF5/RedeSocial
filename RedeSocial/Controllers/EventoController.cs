@@ -10,22 +10,22 @@ using Dominio;
 
 namespace RedeSocial.Controllers
 {
-    public class PessoaJuridicaController : Controller
+    public class EventoController : Controller
     {
         private readonly RedeSocialDbContext _context;
 
-        public PessoaJuridicaController(RedeSocialDbContext context)
+        public EventoController(RedeSocialDbContext context)
         {
             _context = context;
         }
 
-        // GET: PessoaJuridica
+        // GET: Evento
         public async Task<IActionResult> Index()
         {
-            return View(await _context.PessoasJuridicas.ToListAsync());
+            return View(await _context.Eventos.ToListAsync());
         }
 
-        // GET: PessoaJuridica/Details/5
+        // GET: Evento/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,39 +33,39 @@ namespace RedeSocial.Controllers
                 return NotFound();
             }
 
-            var pessoaJuridica = await _context.PessoasJuridicas
+            var evento = await _context.Eventos
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (pessoaJuridica == null)
+            if (evento == null)
             {
                 return NotFound();
             }
 
-            return View(pessoaJuridica);
+            return View(evento);
         }
 
-        // GET: PessoaJuridica/Create
+        // GET: Evento/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: PessoaJuridica/Create
+        // POST: Evento/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,NomeEmpresa,CNPJ,RazaoSocial")] PessoaJuridica pessoaJuridica)
+        public async Task<IActionResult> Create([Bind("Id,NomeAtividade,Data,Hora,Categoria,Descricao")] Evento evento)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(pessoaJuridica);
+                _context.Add(evento);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(pessoaJuridica);
+            return View(evento);
         }
 
-        // GET: PessoaJuridica/Edit/5
+        // GET: Evento/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,22 +73,22 @@ namespace RedeSocial.Controllers
                 return NotFound();
             }
 
-            var pessoaJuridica = await _context.PessoasJuridicas.FindAsync(id);
-            if (pessoaJuridica == null)
+            var evento = await _context.Eventos.FindAsync(id);
+            if (evento == null)
             {
                 return NotFound();
             }
-            return View(pessoaJuridica);
+            return View(evento);
         }
 
-        // POST: PessoaJuridica/Edit/5
+        // POST: Evento/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,NomeEmpresa,CNPJ,RazaoSocial")] PessoaJuridica pessoaJuridica)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,NomeAtividade,Data,Hora,Categoria,Descricao")] Evento evento)
         {
-            if (id != pessoaJuridica.Id)
+            if (id != evento.Id)
             {
                 return NotFound();
             }
@@ -97,12 +97,12 @@ namespace RedeSocial.Controllers
             {
                 try
                 {
-                    _context.Update(pessoaJuridica);
+                    _context.Update(evento);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PessoaJuridicaExists(pessoaJuridica.Id))
+                    if (!EventoExists(evento.Id))
                     {
                         return NotFound();
                     }
@@ -113,10 +113,10 @@ namespace RedeSocial.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(pessoaJuridica);
+            return View(evento);
         }
 
-        // GET: PessoaJuridica/Delete/5
+        // GET: Evento/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -124,30 +124,30 @@ namespace RedeSocial.Controllers
                 return NotFound();
             }
 
-            var pessoaJuridica = await _context.PessoasJuridicas
+            var evento = await _context.Eventos
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (pessoaJuridica == null)
+            if (evento == null)
             {
                 return NotFound();
             }
 
-            return View(pessoaJuridica);
+            return View(evento);
         }
 
-        // POST: PessoaJuridica/Delete/5
+        // POST: Evento/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var pessoaJuridica = await _context.PessoasJuridicas.FindAsync(id);
-            _context.PessoasJuridicas.Remove(pessoaJuridica);
+            var evento = await _context.Eventos.FindAsync(id);
+            _context.Eventos.Remove(evento);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool PessoaJuridicaExists(int id)
+        private bool EventoExists(int id)
         {
-            return _context.PessoasJuridicas.Any(e => e.Id == id);
+            return _context.Eventos.Any(e => e.Id == id);
         }
     }
 }

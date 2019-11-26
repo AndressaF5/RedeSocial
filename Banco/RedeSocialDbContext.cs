@@ -7,7 +7,7 @@ using Dominio;
 namespace Banco
 {
     public class RedeSocialDbContext : DbContext
-    {
+    {        
         public DbSet<Arrecadacao> Arrecadacoes { get; set; }
         public DbSet<Contato> Contatos { get; set; }
         public DbSet<Doacao> Doacoes { get; set; }

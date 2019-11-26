@@ -10,22 +10,22 @@ using Dominio;
 
 namespace RedeSocial.Controllers
 {
-    public class PessoaJuridicaController : Controller
+    public class EnderecoController : Controller
     {
         private readonly RedeSocialDbContext _context;
 
-        public PessoaJuridicaController(RedeSocialDbContext context)
+        public EnderecoController(RedeSocialDbContext context)
         {
             _context = context;
         }
 
-        // GET: PessoaJuridica
+        // GET: Endereco
         public async Task<IActionResult> Index()
         {
-            return View(await _context.PessoasJuridicas.ToListAsync());
+            return View(await _context.Enderecos.ToListAsync());
         }
 
-        // GET: PessoaJuridica/Details/5
+        // GET: Endereco/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,39 +33,39 @@ namespace RedeSocial.Controllers
                 return NotFound();
             }
 
-            var pessoaJuridica = await _context.PessoasJuridicas
+            var endereco = await _context.Enderecos
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (pessoaJuridica == null)
+            if (endereco == null)
             {
                 return NotFound();
             }
 
-            return View(pessoaJuridica);
+            return View(endereco);
         }
 
-        // GET: PessoaJuridica/Create
+        // GET: Endereco/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: PessoaJuridica/Create
+        // POST: Endereco/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,NomeEmpresa,CNPJ,RazaoSocial")] PessoaJuridica pessoaJuridica)
+        public async Task<IActionResult> Create([Bind("Id,Rua,Bairro,Cidade,UF,CEP,Complemento")] Endereco endereco)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(pessoaJuridica);
+                _context.Add(endereco);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(pessoaJuridica);
+            return View(endereco);
         }
 
-        // GET: PessoaJuridica/Edit/5
+        // GET: Endereco/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,22 +73,22 @@ namespace RedeSocial.Controllers
                 return NotFound();
             }
 
-            var pessoaJuridica = await _context.PessoasJuridicas.FindAsync(id);
-            if (pessoaJuridica == null)
+            var endereco = await _context.Enderecos.FindAsync(id);
+            if (endereco == null)
             {
                 return NotFound();
             }
-            return View(pessoaJuridica);
+            return View(endereco);
         }
 
-        // POST: PessoaJuridica/Edit/5
+        // POST: Endereco/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,NomeEmpresa,CNPJ,RazaoSocial")] PessoaJuridica pessoaJuridica)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Rua,Bairro,Cidade,UF,CEP,Complemento")] Endereco endereco)
         {
-            if (id != pessoaJuridica.Id)
+            if (id != endereco.Id)
             {
                 return NotFound();
             }
@@ -97,12 +97,12 @@ namespace RedeSocial.Controllers
             {
                 try
                 {
-                    _context.Update(pessoaJuridica);
+                    _context.Update(endereco);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PessoaJuridicaExists(pessoaJuridica.Id))
+                    if (!EnderecoExists(endereco.Id))
                     {
                         return NotFound();
                     }
@@ -113,10 +113,10 @@ namespace RedeSocial.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(pessoaJuridica);
+            return View(endereco);
         }
 
-        // GET: PessoaJuridica/Delete/5
+        // GET: Endereco/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -124,30 +124,30 @@ namespace RedeSocial.Controllers
                 return NotFound();
             }
 
-            var pessoaJuridica = await _context.PessoasJuridicas
+            var endereco = await _context.Enderecos
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (pessoaJuridica == null)
+            if (endereco == null)
             {
                 return NotFound();
             }
 
-            return View(pessoaJuridica);
+            return View(endereco);
         }
 
-        // POST: PessoaJuridica/Delete/5
+        // POST: Endereco/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var pessoaJuridica = await _context.PessoasJuridicas.FindAsync(id);
-            _context.PessoasJuridicas.Remove(pessoaJuridica);
+            var endereco = await _context.Enderecos.FindAsync(id);
+            _context.Enderecos.Remove(endereco);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool PessoaJuridicaExists(int id)
+        private bool EnderecoExists(int id)
         {
-            return _context.PessoasJuridicas.Any(e => e.Id == id);
+            return _context.Enderecos.Any(e => e.Id == id);
         }
     }
 }

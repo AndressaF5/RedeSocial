@@ -10,22 +10,22 @@ using Dominio;
 
 namespace RedeSocial.Controllers
 {
-    public class PessoaJuridicaController : Controller
+    public class DoacaoController : Controller
     {
         private readonly RedeSocialDbContext _context;
 
-        public PessoaJuridicaController(RedeSocialDbContext context)
+        public DoacaoController(RedeSocialDbContext context)
         {
             _context = context;
         }
 
-        // GET: PessoaJuridica
+        // GET: Doacao
         public async Task<IActionResult> Index()
         {
-            return View(await _context.PessoasJuridicas.ToListAsync());
+            return View(await _context.Doacoes.ToListAsync());
         }
 
-        // GET: PessoaJuridica/Details/5
+        // GET: Doacao/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,39 +33,39 @@ namespace RedeSocial.Controllers
                 return NotFound();
             }
 
-            var pessoaJuridica = await _context.PessoasJuridicas
+            var doacao = await _context.Doacoes
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (pessoaJuridica == null)
+            if (doacao == null)
             {
                 return NotFound();
             }
 
-            return View(pessoaJuridica);
+            return View(doacao);
         }
 
-        // GET: PessoaJuridica/Create
+        // GET: Doacao/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: PessoaJuridica/Create
+        // POST: Doacao/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,NomeEmpresa,CNPJ,RazaoSocial")] PessoaJuridica pessoaJuridica)
+        public async Task<IActionResult> Create([Bind("Id,ValorDoacao,MetaArrecadacao,ValorArrecadacao")] Doacao doacao)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(pessoaJuridica);
+                _context.Add(doacao);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(pessoaJuridica);
+            return View(doacao);
         }
 
-        // GET: PessoaJuridica/Edit/5
+        // GET: Doacao/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,22 +73,22 @@ namespace RedeSocial.Controllers
                 return NotFound();
             }
 
-            var pessoaJuridica = await _context.PessoasJuridicas.FindAsync(id);
-            if (pessoaJuridica == null)
+            var doacao = await _context.Doacoes.FindAsync(id);
+            if (doacao == null)
             {
                 return NotFound();
             }
-            return View(pessoaJuridica);
+            return View(doacao);
         }
 
-        // POST: PessoaJuridica/Edit/5
+        // POST: Doacao/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,NomeEmpresa,CNPJ,RazaoSocial")] PessoaJuridica pessoaJuridica)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ValorDoacao,MetaArrecadacao,ValorArrecadacao")] Doacao doacao)
         {
-            if (id != pessoaJuridica.Id)
+            if (id != doacao.Id)
             {
                 return NotFound();
             }
@@ -97,12 +97,12 @@ namespace RedeSocial.Controllers
             {
                 try
                 {
-                    _context.Update(pessoaJuridica);
+                    _context.Update(doacao);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PessoaJuridicaExists(pessoaJuridica.Id))
+                    if (!DoacaoExists(doacao.Id))
                     {
                         return NotFound();
                     }
@@ -113,10 +113,10 @@ namespace RedeSocial.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(pessoaJuridica);
+            return View(doacao);
         }
 
-        // GET: PessoaJuridica/Delete/5
+        // GET: Doacao/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -124,30 +124,30 @@ namespace RedeSocial.Controllers
                 return NotFound();
             }
 
-            var pessoaJuridica = await _context.PessoasJuridicas
+            var doacao = await _context.Doacoes
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (pessoaJuridica == null)
+            if (doacao == null)
             {
                 return NotFound();
             }
 
-            return View(pessoaJuridica);
+            return View(doacao);
         }
 
-        // POST: PessoaJuridica/Delete/5
+        // POST: Doacao/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var pessoaJuridica = await _context.PessoasJuridicas.FindAsync(id);
-            _context.PessoasJuridicas.Remove(pessoaJuridica);
+            var doacao = await _context.Doacoes.FindAsync(id);
+            _context.Doacoes.Remove(doacao);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool PessoaJuridicaExists(int id)
+        private bool DoacaoExists(int id)
         {
-            return _context.PessoasJuridicas.Any(e => e.Id == id);
+            return _context.Doacoes.Any(e => e.Id == id);
         }
     }
 }

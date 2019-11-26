@@ -1,0 +1,48 @@
+﻿@model Dominio.Arrecadacao
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h2>Create</h2>
+
+<h4>Arrecadacao</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="QtdParticipantes" class="control-label"></label>
+                <input asp-for="QtdParticipantes" class="form-control" />
+                <span asp-validation-for="QtdParticipantes" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="QtdAlimento" class="control-label"></label>
+                <input asp-for="QtdAlimento" class="form-control" />
+                <span asp-validation-for="QtdAlimento" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MetaArrecadacao" class="control-label"></label>
+                <input asp-for="MetaArrecadacao" class="form-control" />
+                <span asp-validation-for="MetaArrecadacao" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IdadePublicoAlvo" class="control-label"></label>
+                <input asp-for="IdadePublicoAlvo" class="form-control" />
+                <span asp-validation-for="IdadePublicoAlvo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
