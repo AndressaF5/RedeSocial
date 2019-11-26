@@ -22,7 +22,7 @@ namespace Dominio
 				Complemento,
 				Bairro,
 				Cidade,
-				Uf
+				UF
 				);
 	   }
 

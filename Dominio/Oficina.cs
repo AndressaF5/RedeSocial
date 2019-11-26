@@ -7,11 +7,11 @@ namespace Dominio
     public class Oficina : Evento
     {
         public int Id { get; set; }
-        public int QtdPrticipantes { get; set; }
+        public int QtdParticipantes { get; set; }
         public List<Usuario> ListaParticipantes { get; set; }
 
-        public void verificarDisponibilidadeVaga() {
-		    if (this.ListaParticipantes.length >= this.QtdParticipantes) {
+        public void verificarDisponibilidadeVaga(List<Usuario> ListaParticipantes, int QtdParticipantes ) {
+		    if (ListaParticipantes.Count >= QtdParticipantes) {
 			    Console.WriteLine("Não temos mais vagas. Fim da inscrições");
 			
 		    } else {
@@ -20,11 +20,11 @@ namespace Dominio
 	    }
 
 	    public void divulgar() {
-            base(divulgar());
+            base.divulgar();
 		    Console.WriteLine(":: Oficina ::\n "
 				    + "Quantidade de participantes: %d",
-				    this.QtdParticipantes
-				    );
+                    QtdParticipantes
+                    );
 	    }
         
     }

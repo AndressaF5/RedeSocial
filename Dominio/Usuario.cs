@@ -14,12 +14,12 @@ namespace Dominio
     
         
 	    public void divulgar() {
-		    Console.WriteLine(":: Dados pessoais ::\n "
+		 /*   Console.WriteLine(":: Dados pessoais ::\n "
 				    + "Usuário: %s \n "
 				    + "Senha: %s \n",
-				   Usuario,
-				   Senha
-				    );
+				   //Usuario,
+				   //Senha
+				    );*/
 		    Contato.divulgar();
 	    }
 
