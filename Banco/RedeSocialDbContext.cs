@@ -6,16 +6,18 @@ using Dominio;
 
 namespace Banco
 {
-    class RedeSocialDbContext : DbContext
+    public class RedeSocialDbContext : DbContext
     {
-        DbSet<Arrecadacao> Arrecadacoes { get; set; }
-        DbSet<Contato> Contatos { get; set; }
-        DbSet<Doacao> Doacoes { get; set; }
-        DbSet<Endereco> Enderecos { get; set; }
-        DbSet<Evento> Eventos { get; set; }
-        DbSet<Oficina> Oficinas { get; set; }
-        DbSet<Usuario> Usuarios { get; set; }
-        DbSet<UsuarioEvento> UsuariosEventos { get; set; }
+        public DbSet<Arrecadacao> Arrecadacoes { get; set; }
+        public DbSet<Contato> Contatos { get; set; }
+        public DbSet<Doacao> Doacoes { get; set; }
+        public DbSet<Endereco> Enderecos { get; set; }
+        public DbSet<Evento> Eventos { get; set; }
+        public DbSet<Oficina> Oficinas { get; set; }
+        public DbSet<PessoaFisica> PessoasFisicas { get; set; }
+        public DbSet<PessoaJuridica> PessoasJuridicas { get; set; }
+        public DbSet<Usuario> Usuarios { get; set; }
+        public DbSet<UsuarioEvento> UsuariosEventos { get; set; }
 
         
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
