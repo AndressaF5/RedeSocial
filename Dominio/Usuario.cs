@@ -10,7 +10,7 @@ namespace Dominio
         public PessoaFisica PessoaFisica { get; set; }
         public PessoaJuridica PessoaJuridica { get; set; }
         public Contato Contato { get; set; }
-        public ICollection<Evento> Evento { get; set; }
+        public ICollection<UsuarioEvento> Evento { get; set; }
     
         
 	    public void divulgar() {
