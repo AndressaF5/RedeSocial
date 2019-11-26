@@ -10,9 +10,22 @@ namespace Dominio
         public int QtdPrticipantes { get; set; }
         public List<Usuario> ListaParticipantes { get; set; }
 
-        public static Boolean VerificarDisponibilidade()
-        {
-            return true;
-        }
+        public void verificarDisponibilidadeVaga() {
+		    if (this.ListaParticipantes.length >= this.QtdParticipantes) {
+			    Console.WriteLine("Não temos mais vagas. Fim da inscrições");
+			
+		    } else {
+			    Console.WriteLine("Seja bem vindo(a)! Acompanhe sua inscrição!");
+		    }
+	    }
+
+	    public void divulgar() {
+            base(divulgar());
+		    Console.WriteLine(":: Oficina ::\n "
+				    + "Quantidade de participantes: %d",
+				    this.QtdParticipantes
+				    );
+	    }
+        
     }
 }

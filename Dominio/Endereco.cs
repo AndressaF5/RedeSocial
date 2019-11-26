@@ -14,9 +14,17 @@ namespace Dominio
         public string CEP { get; set; }
         public string Complemento { get; set; }
 
-        public static void Divulgar()
-        {
+       public void divulgar() {
+		Console.WriteLine(":: Endereço ::\n CEP: %s\n"
+				+ " %s, %s - %s, %s - %s \n",
+				CEP,
+				Rua,
+				Complemento,
+				Bairro,
+				Cidade,
+				Uf
+				);
+	   }
 
-        }
     }
 }

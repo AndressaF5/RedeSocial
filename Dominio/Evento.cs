@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Dominio
 {
-    public class Evento
+    public abstract class Evento
     {
         public int Id { get; set; }
         public string NomeAtividade { get; set; }
@@ -13,15 +13,21 @@ namespace Dominio
         public string Categoria { get; set; }
         public string Descricao { get; set; }
         public Endereco Endereco { get; set; }
-
-        public static void ImprimirTipo()
-        {
-
-        }
-
-        public static void Divulgar()
-        {
-
-        }
+        public Usuario Usuario { get; set; }
+	    
+	    public void divulgar() {
+		    Console.WriteLine("Nome da Atividade: %s \n" 
+				    + "Data: %s \n" 
+		    		+ "Hora:%s \n"
+				    + "Categoria: %s \n" 
+				    + "Descrição: %s \n", 
+				    this.NomeAtividade, 
+				    this.DataAtividade, 
+			        this.Hora, 
+				    this.Categoria,
+				    this.Descricao
+				    );
+		}
+        
     }
 }
