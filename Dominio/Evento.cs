@@ -13,7 +13,7 @@ namespace Dominio
         public string Categoria { get; set; }
         public string Descricao { get; set; }
         public Endereco Endereco { get; set; }
-        public Usuario Usuario { get; set; }
+        public ICollection<UsuarioEvento> UsuarioEvento { get; set; }
 	    
 	    public void divulgar() {
 		    Console.WriteLine("Nome da Atividade: %s \n" 
