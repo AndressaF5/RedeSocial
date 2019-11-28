@@ -13,11 +13,23 @@ namespace Dominio
         public string Categoria { get; set; }
         public string Descricao { get; set; }
         public Endereco Endereco { get; set; }
-
         public ICollection<UsuarioEvento> UsuarioEvento { get; set; }
-        
+	    
+	    public void divulgar() {
+		    Console.WriteLine("Nome da Atividade: %s \n" 
+				    + "Data: %s \n" 
+		    		+ "Hora:%s \n"
+				    + "Categoria: %s \n" 
+				    + "Descrição: %s \n", 
+				    this.NomeAtividade, 
+				    this.Data, 
+			        this.Hora, 
+				    this.Categoria,
+				    this.Descricao
+				    );
+		}
 
-        public void divulgar()
+        public void Divulgar()
         {
             Console.WriteLine("Nome da Atividade: %s \n"
                     + "Data: %s \n"
