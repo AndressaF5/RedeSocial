@@ -13,24 +13,9 @@ namespace Dominio
         public string Categoria { get; set; }
         public string Descricao { get; set; }
         public Endereco Endereco { get; set; }
-<<<<<<< HEAD
+
         public ICollection<UsuarioEvento> UsuarioEvento { get; set; }
-	    
-	    public void divulgar() {
-		    Console.WriteLine("Nome da Atividade: %s \n" 
-				    + "Data: %s \n" 
-		    		+ "Hora:%s \n"
-				    + "Categoria: %s \n" 
-				    + "Descrição: %s \n", 
-				    this.NomeAtividade, 
-				    this.Data, 
-			        this.Hora, 
-				    this.Categoria,
-				    this.Descricao
-				    );
-		}
         
-=======
 
         public void divulgar()
         {
@@ -47,6 +32,5 @@ namespace Dominio
                     );
 
         }
->>>>>>> 7199ed76ed076aff7a74aa678933aff4a330be1d
     }
 }

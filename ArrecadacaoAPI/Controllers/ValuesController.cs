@@ -20,7 +20,7 @@ namespace ArrecadacaoAPI.Controllers
         public ActionResult<IEnumerable<string>> Get()
         {
             //Read
-
+            /*
             using (var connection = new SqlConnection(connectionString))
             {
                 var cmdText = "SELECT * FROM Arrecadacoes";
@@ -41,14 +41,18 @@ namespace ArrecadacaoAPI.Controllers
                             arrecadacao.PublicoAlvo = (int)reader["PublicoAlvo"];
 
                             return new string[] { "Id", "QtdPerticipantes", "QtdAlimento", "MetaArrecadacao", "PublicoAlvo"};
+                           
                         }
+           
                     }
                 }
                 finally
                 {
                     connection.Close();
-                }
-            }
+                }*/
+
+
+            return new string[] { "value1", "value2" };
         }
 
         // GET api/values/5
