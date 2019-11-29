@@ -17,10 +17,12 @@ namespace ArrecadacaoAPI.Controllers
 
         // GET api/values
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public ActionResult<IEnumerable<Arrecadacao>> Get()
         {
             //Read
-            /*
+
+            var arrecadacoes = new List<Arrecadacao>();
+
             using (var connection = new SqlConnection(connectionString))
             {
                 var cmdText = "SELECT * FROM Arrecadacoes";
@@ -40,24 +42,24 @@ namespace ArrecadacaoAPI.Controllers
                             arrecadacao.MetaArrecadacao = (float)reader["MetaArrecadacao"];
                             arrecadacao.PublicoAlvo = (int)reader["PublicoAlvo"];
 
-                            return new string[] { "Id", "QtdPerticipantes", "QtdAlimento", "MetaArrecadacao", "PublicoAlvo"};
-                           
+                            arrecadacoes.Add(arrecadacao);
+
                         }
-           
+
                     }
                 }
                 finally
                 {
                     connection.Close();
-                }*/
+                }
 
-
-            return new string[] { "value1", "value2" };
+            }
+            return arrecadacoes;
         }
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
+        public ActionResult<Arrecadacao> Get(int id)
         {
             // Details
 
@@ -97,8 +99,6 @@ namespace ArrecadacaoAPI.Controllers
                 }
                 return arrecadacao;
             }
-            
-            return "value";
         }
 
         // POST api/values

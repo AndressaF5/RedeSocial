@@ -7,7 +7,7 @@ using Dominio;
 using System.Data.SqlClient;
 using System.Data;
 
-namespace ContatoAPI.Controllers
+namespace DoacaoAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -17,7 +17,7 @@ namespace ContatoAPI.Controllers
 
         // GET api/values
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public ActionResult<IEnumerable<Doacao>> Get()
         {
             // Read
             var doacoes = new List<Doacao>();
@@ -54,13 +54,11 @@ namespace ContatoAPI.Controllers
 
                 return doacoes;
             }
-
-            return new string[] { "value1", "value2" };
         }
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
+        public ActionResult<Doacao> Get(int id)
         {
             // Details
 
@@ -99,8 +97,6 @@ namespace ContatoAPI.Controllers
 
                 return doacao;
             }
-
-            return "value";
         }
 
         // POST api/values
@@ -141,7 +137,7 @@ namespace ContatoAPI.Controllers
 
             using (SqlConnection connetcion = new SqlConnection(connectionString))
             {
-                string cmdText = "UPDATE Doacoes SET ValorDoacao=@ValorDoacao, MetaArrecadacao=@MetaArrecadacao, ValorArrecadado=@ValorArrecadado";
+                string cmdText = "UPDATE Doacoes SET ValorDoacao=@ValorDoacao, MetaArrecadacao=@MetaArrecadacao, ValorArrecadado=@ValorArrecadado WHERE Id=@Id";
                 SqlCommand cmd = new SqlCommand(cmdText, connetcion);
                 cmd.Parameters.AddWithValue("ValorDoacao", doacao.ValorDoacao);
                 cmd.Parameters.AddWithValue("MetaArrecadacao", doacao.MetaArrecadacao);

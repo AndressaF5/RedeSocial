@@ -17,7 +17,7 @@ namespace ContatoAPI.Controllers
 
         // GET api/values
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public ActionResult<IEnumerable<Contato>> Get()
         {
             // Read
 
@@ -42,22 +42,19 @@ namespace ContatoAPI.Controllers
                             contatos.Add(contato);
                         }
                     }
-
                 }
                 finally
                 {
                     connection.Close();
                 }
-
-                return contatos;
             }
 
-            return new string[] { "value1", "value2" };
+            return contatos;
         }
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
+        public ActionResult<Contato> Get(int id)
         {
             // Details
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -91,9 +88,9 @@ namespace ContatoAPI.Controllers
                 {
                     connection.Close();
                 }
-            }
 
-            return "value";
+                return contato;
+            }
         }
 
         // POST api/values

@@ -7,7 +7,7 @@ using Dominio;
 using System.Data.SqlClient;
 using System.Data;
 
-namespace ContatoAPI.Controllers
+namespace EnderecoAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -17,7 +17,7 @@ namespace ContatoAPI.Controllers
 
         // GET api/values
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public ActionResult<IEnumerable<Endereco>> Get()
         {
             // Read
             var enderecos = new List<Endereco>();
@@ -57,13 +57,11 @@ namespace ContatoAPI.Controllers
 
                 return enderecos;
             }
-
-            return new string[] { "value1", "value2" };
         }
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
+        public ActionResult<Endereco> Get(int id)
         {
             // Details
 
@@ -105,8 +103,6 @@ namespace ContatoAPI.Controllers
 
                 return endereco;
             }
-
-            return "value";
         }
 
         // POST api/values
