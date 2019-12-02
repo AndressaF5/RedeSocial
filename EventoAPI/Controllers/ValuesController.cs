@@ -17,11 +17,11 @@ namespace EventoAPI.Controllers
 
         // GET api/values
         [HttpGet]
-        public ActionResult<IEnumerable<Evento>> Get()
+        public ActionResult<IEnumerable<Oficina>> Get()
         {
             // Read
 
-            var eventos = new List<Evento>();
+            var eventos = new List<Oficina>();
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -34,13 +34,21 @@ namespace EventoAPI.Controllers
                     {
                         while (reader.Read())
                         {
-                            var evento = new Evento();
+                            var evento = new Oficina();
                             evento.Id = (int)reader["Id"];
                             evento.NomeAtividade = reader["NomeAtividade"].ToString();
                             evento.Data = (DateTime)reader["Data"];
                             evento.Hora = (DateTime)reader["Hora"];
                             evento.Categoria = reader["Categoria"].ToString();
                             evento.Descricao = reader["Descricao"].ToString();
+                            evento.NomeOficina = reader["NomeOficina"].ToString();
+                            evento.QtdParticipantes = (int)reader["QtdParticipantes"];
+                            evento.Endereco.Rua = reader["Rua"].ToString();
+                            evento.Endereco.Bairro = reader["Bairro"].ToString();
+                            evento.Endereco.Cidade = reader["Cidade"].ToString();
+                            evento.Endereco.UF = reader["UF"].ToString();
+                            evento.Endereco.CEP = reader["CEP"].ToString();
+                            evento.Endereco.Complemento = reader["Complemento"].ToString();
 
                             eventos.Add(evento);
 
@@ -62,7 +70,7 @@ namespace EventoAPI.Controllers
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public ActionResult<Evento> Get(int id)
+        public ActionResult<Oficina> Get(int id)
         {
             // Details
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -70,7 +78,7 @@ namespace EventoAPI.Controllers
                 string sql = "SELEC Id, NomeAtividade, Data, Hora, Categoria, Descricao FROM Eventos WHERE Id=@Id";
                 SqlCommand cmd = new SqlCommand(sql, connection);
                 cmd.Parameters.AddWithValue("@Id", id);
-                Evento evento = null;
+                Oficina evento = null;
                 try
                 {
                     connection.Open();
@@ -80,13 +88,21 @@ namespace EventoAPI.Controllers
                         {
                             if (reader.Read())
                             {
-                                evento = new Evento();
+                                evento = new Oficina();
                                 evento.Id = (int)reader["Id"];
                                 evento.NomeAtividade = reader["NomeAtividade"].ToString();
                                 evento.Data = (DateTime)reader["Data"];
                                 evento.Hora = (DateTime)reader["Hora"];
                                 evento.Categoria = reader["Categoria"].ToString();
                                 evento.Descricao = reader["Descricao"].ToString();
+                                evento.NomeOficina = reader["NomeOficina"].ToString();
+                                evento.QtdParticipantes = (int)reader["QtdParticipantes"];
+                                //evento.Endereco.Rua = reader["Rua"].ToString();
+                                //evento.Endereco.Bairro = reader["Bairro"].ToString();
+                                //evento.Endereco.Cidade = reader["Cidade"].ToString();
+                                //evento.Endereco.UF = reader["UF"].ToString();
+                                //evento.Endereco.CEP = reader["CEP"].ToString();
+                                //evento.Endereco.Complemento = reader["Complemento"].ToString();
                             }
                         }
                     }
@@ -100,27 +116,25 @@ namespace EventoAPI.Controllers
                     connection.Close();
                 }
                 return evento;
-            }       
-
-            //return "value";
+            }
         }
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody] Evento evento)
+        public void Post([FromBody] Oficina evento)
         {
             // Create
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                string cmdText = "INSERT INTO Usuario (NomeAtividade, Data, Hora, Categoria, Descricao) Values(@NomeAtividade, @Data, @Hora, @Categoria, @Descricao)";
+                string cmdText = "INSERT INTO Usuario (NomeAtividade, Data, Hora, Categoria, Descricao, NomeOficina, QtdParticipantes) Values(@NomeAtividade, @Data, @Hora, @Categoria, @Descricao, @NomeOficina, @QtdParticipantes)";
                 SqlCommand cmd = new SqlCommand(cmdText, connection);
                 cmd.CommandType = CommandType.Text;
-                cmd.Parameters.AddWithValue("@Nome", evento.NomeAtividade);
-                cmd.Parameters.AddWithValue("@Sobrenome", evento.Data);
-                cmd.Parameters.AddWithValue("@Email", evento.Hora);
-                cmd.Parameters.AddWithValue("@Telefone", evento.Categoria);
-                cmd.Parameters.AddWithValue("@DataNascimento", evento.Descricao);
+                cmd.Parameters.AddWithValue("@NomeAtividade", evento.NomeAtividade);
+                cmd.Parameters.AddWithValue("@Data", evento.Data);
+                cmd.Parameters.AddWithValue("@Hora", evento.Hora);
+                cmd.Parameters.AddWithValue("@Categoria", evento.Categoria);
+                cmd.Parameters.AddWithValue("@Descricao", evento.Descricao);
                 try
                 {
                     connection.Open();
@@ -139,20 +153,22 @@ namespace EventoAPI.Controllers
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] Evento evento)
+        public void Put(int id, [FromBody] Oficina evento)
         {
             // Update
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                string cmdText = "UPDATE Eventos SET NomeAtividade=@NomeAtividade, Data=@Data, Hora=@Hora, Categoria=@Categoria, Descricao=@Descricao WHERE Id=@Id";
+                string cmdText = "UPDATE Eventos SET NomeAtividade=@NomeAtividade, Data=@Data, Hora=@Hora, Categoria=@Categoria, Descricao=@Descricao, NomeOficina=@NomeOficina,  WHERE Id=@Id";
                 SqlCommand cmd = new SqlCommand(cmdText, connection);
                 cmd.Parameters.AddWithValue("Id", evento.Id);
-                cmd.Parameters.AddWithValue("Nome", evento.NomeAtividade);
-                cmd.Parameters.AddWithValue("Sobrenome", evento.Data);
-                cmd.Parameters.AddWithValue("Email", evento.Hora);
-                cmd.Parameters.AddWithValue("Telefone", evento.Categoria);
-                cmd.Parameters.AddWithValue("DataNascimento", evento.Descricao);
+                cmd.Parameters.AddWithValue("NomeAtividade", evento.NomeAtividade);
+                cmd.Parameters.AddWithValue("Data", evento.Data);
+                cmd.Parameters.AddWithValue("Hora", evento.Hora);
+                cmd.Parameters.AddWithValue("Categoria", evento.Categoria);
+                cmd.Parameters.AddWithValue("Descricao", evento.Descricao);
+                cmd.Parameters.AddWithValue("NomeOficina", evento.NomeOficina);
+                cmd.Parameters.AddWithValue("QtdParticipantes", evento.QtdParticipantes);
                 try
                 {
                     connection.Open();

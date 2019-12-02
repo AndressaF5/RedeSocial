@@ -22,7 +22,7 @@ namespace Dominio
 		    this.QtdParticipantes,
 		    this.QtdAlimento,
 		    this.MetaArrecadacao,
-		    this.PublicoAlvo    
+		    this.PublicoAlvo
 		
 		    );
 	    }

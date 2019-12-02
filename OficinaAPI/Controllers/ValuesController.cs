@@ -36,6 +36,7 @@ namespace EventoAPI.Controllers
                         {
                             var oficina = new Oficina();
                             oficina.Id = (int)reader["Id"];
+                            oficina.NomeOficina = reader["NomeOficina"].ToString();
                             oficina.QtdParticipantes = (int)reader["QtdParticipante"];
 
                             oficinas.Add(oficina);
@@ -78,6 +79,7 @@ namespace EventoAPI.Controllers
                             {
                                 oficina = new Oficina();
                                 oficina.Id = (int)reader["Id"];
+                                oficina.NomeOficina = reader["NomeOficina"].ToString();
                                 oficina.QtdParticipantes = (int)reader["QtdParticipantes"];
                             }
                         }
@@ -103,9 +105,10 @@ namespace EventoAPI.Controllers
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                string cmdText = "INSERT INTO Oficinas (QtdParticipantes) Values(@QtdParticipantes)";
+                string cmdText = "INSERT INTO Oficinas (NomeOficina, QtdParticipantes) Values(@NomeOficina ,@QtdParticipantes)";
                 SqlCommand cmd = new SqlCommand(cmdText, connection);
                 cmd.CommandType = CommandType.Text;
+                cmd.Parameters.AddWithValue("@NomeOficina", oficina.NomeOficina);
                 cmd.Parameters.AddWithValue("@QtdParticipantes", oficina.QtdParticipantes);
                 try
                 {
@@ -131,9 +134,10 @@ namespace EventoAPI.Controllers
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                string cmdText = "UPDATE Oficinas SET QtdParticipantes=@QtdParticipantes WHERE Id=@Id";
+                string cmdText = "UPDATE Oficinas SET NomeOficina=@NomeOficina, QtdParticipantes=@QtdParticipantes WHERE Id=@Id";
                 SqlCommand cmd = new SqlCommand(cmdText, connection);
                 cmd.Parameters.AddWithValue("Id", oficina.Id);
+                cmd.Parameters.AddWithValue("NomeOficina", oficina.NomeOficina);
                 cmd.Parameters.AddWithValue("QtdParticipantes", oficina.QtdParticipantes);
                 try
                 {
