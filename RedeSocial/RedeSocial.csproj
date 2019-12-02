@@ -20,8 +20,14 @@
   <ItemGroup>
     <ProjectReference Include="..\ArrecadacaoAPI\ArrecadacaoAPI.csproj" />
     <ProjectReference Include="..\Banco\Banco.csproj" />
+    <ProjectReference Include="..\ContatoAPI\ContatoAPI.csproj" />
     <ProjectReference Include="..\DoacaoAPI\DoacaoAPI.csproj" />
     <ProjectReference Include="..\Dominio\Dominio.csproj" />
+    <ProjectReference Include="..\EnderecoAPI\EnderecoAPI.csproj" />
+    <ProjectReference Include="..\EventoAPI\EventoAPI.csproj" />
+    <ProjectReference Include="..\OficinaAPI\OficinaAPI.csproj" />
+    <ProjectReference Include="..\PessoaFisicaAPI\PessoaFisicaAPI.csproj" />
+    <ProjectReference Include="..\PessoaJuridicaAPI\PessoaJuridicaAPI.csproj" />
   </ItemGroup>
 
 </Project>

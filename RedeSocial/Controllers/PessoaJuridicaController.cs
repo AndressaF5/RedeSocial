@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Banco;
 using Dominio;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using Newtonsoft.Json;
 
 namespace RedeSocial.Controllers
 {
@@ -22,7 +25,21 @@ namespace RedeSocial.Controllers
         // GET: PessoaJuridica
         public async Task<IActionResult> Index()
         {
-            return View(await _context.PessoasJuridicas.ToListAsync());
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("https://pessoajuridicaapi2019.azurewebsites.net");
+                var mediaTyper = new MediaTypeWithQualityHeaderValue("api/ValuesController");
+                client.DefaultRequestHeaders.Accept.Add(mediaTyper);
+                var response = client.GetAsync("api/PessoaJuridicaAPI").Result;
+                List<PessoaJuridica> pessoasJuridicas = new List<PessoaJuridica>();
+                if (response.IsSuccessStatusCode)
+                {
+                    string json = await response.Content.ReadAsStringAsync();
+                    pessoasJuridicas = JsonConvert.DeserializeObject<List<PessoaJuridica>>(json);
+                }
+
+                return View(pessoasJuridicas);
+            }
         }
 
         // GET: PessoaJuridica/Details/5
