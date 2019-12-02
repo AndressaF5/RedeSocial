@@ -10,6 +10,7 @@ namespace Dominio
         public string NomeEmpresa { get; set; }
         public string CNPJ { get; set; }
         public string RazaoSocial { get; set; }
+        public Endereco Endereco { get; set; }
 
         
 	    public void divulgar() {
