@@ -7,25 +7,27 @@ using Dominio;
 using System.Data.SqlClient;
 using System.Data;
 
-namespace DoacaoAPI.Controllers
+namespace ArrecadacaoAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ValuesController : ControllerBase
+    public class ArrecadacaoAPIController : ControllerBase
     {
         string connectionString = "Server=tcp:trabalhos.database.windows.net,1433;Initial Catalog=infnettrabalhos;Persist Security Info=False;User ID=andressafsilva;Password=Porcoaranh@007;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
 
         // GET api/values
         [HttpGet]
-        public ActionResult<IEnumerable<Doacao>> Get()
+        public ActionResult<IEnumerable<Arrecadacao>> Get()
         {
-            // Read
-            var doacoes = new List<Doacao>();
+            //Read
 
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            var arrecadacoes = new List<Arrecadacao>();
+
+            using (var connection = new SqlConnection(connectionString))
             {
-                var cmdText = "SELECT * FROM Doacoes";
+                var cmdText = "SELECT * FROM Arrecadacoes";
                 var select = new SqlCommand(cmdText, connection);
+
                 try
                 {
                     connection.Open();
@@ -33,41 +35,41 @@ namespace DoacaoAPI.Controllers
                     {
                         while (reader.Read())
                         {
-                            var doacao = new Doacao();
-                            doacao.Id = (int)reader["Id"];
-                            doacao.ValorDoacao = (float)reader["ValorDoacao"];
-                            doacao.MetaArrecadacao = (float)reader["MetaArrecadacao"];
-                            doacao.ValorArrecadado = (float)reader["ValorArrecadado"];
+                            var arrecadacao = new Arrecadacao();
+                            arrecadacao.Id = (int)reader["Id"];
+                            arrecadacao.QtdParticipantes = (int)reader["QtdParticipantes"];
+                            arrecadacao.QtdAlimento = (float)reader["QtdAlimento"];
+                            arrecadacao.MetaArrecadacao = (float)reader["MetaArrecadacao"];
+                            arrecadacao.PublicoAlvo = (int)reader["PublicoAlvo"];
 
-                            doacoes.Add(doacao);
+                            arrecadacoes.Add(arrecadacao);
+
                         }
+
                     }
-                }
-                catch (Exception e)
-                {
-                    throw e;
                 }
                 finally
                 {
                     connection.Close();
                 }
 
-                return doacoes;
             }
+            return arrecadacoes;
         }
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public ActionResult<Doacao> Get(int id)
+        public ActionResult<Arrecadacao> Get(int id)
         {
             // Details
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                string sql = "SELECT Id, ValorDoacao, MetaArrecadacao, ValorArrecadado WHERE Doacoes Id=@Id";
+                string sql = "SELECT Id, QtdParticipantes, QtdAlimento, MetaArrecadacao, PublicoAlvo FROM Arrecadacoes Where Id=@Id";
                 SqlCommand cmd = new SqlCommand(sql, connection);
                 cmd.Parameters.AddWithValue("@Id", id);
-                Doacao doacao = null;
+                Arrecadacao arrecadacao = null;
+
                 try
                 {
                     connection.Open();
@@ -77,11 +79,12 @@ namespace DoacaoAPI.Controllers
                         {
                             if (reader.Read())
                             {
-                                doacao = new Doacao();
-                                doacao.Id = (int)reader["Id"];
-                                doacao.ValorDoacao = (float)reader["ValorDoacao"];
-                                doacao.MetaArrecadacao = (float)reader["MetaArrecadacao"];
-                                doacao.ValorArrecadado = (float)reader["ValorArrecadado"];
+                                arrecadacao = new Arrecadacao();
+                                arrecadacao.Id = (int)reader["Id"];
+                                arrecadacao.QtdParticipantes = (int)reader["QtdParticipantes"];
+                                arrecadacao.QtdAlimento = (float)reader["QtdAlimento"];
+                                arrecadacao.MetaArrecadacao = (float)reader["MetaArrecadacao"];
+                                arrecadacao.PublicoAlvo = (int)reader["PublicoAlvo"];
                             }
                         }
                     }
@@ -94,25 +97,26 @@ namespace DoacaoAPI.Controllers
                 {
                     connection.Close();
                 }
-
-                return doacao;
+                return arrecadacao;
             }
         }
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody] Doacao doacao)
+        public void Post([FromBody] Arrecadacao arrecadacao)
         {
-            // Create
+            //create
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                string cmdText = "INSERT INTO Doacoes (ValorDoacao, MetaArrecadacao, ValorArrecadado) VALUES (@ValorDoacao, @MetaArrecadacao, @ValorArrecadado)";
-                SqlCommand cmd = new SqlCommand(cmdText, connection);
+                string cmdTex = "INSERT INTO Arrecadacao (QtdParticipantes, QtdAlimento, MetaArrecadacao) VALUES(@QtdParticipantes, @QtdAlimento, @MetaArrecadacao)";
+                SqlCommand cmd = new SqlCommand(cmdTex, connection);
                 cmd.CommandType = CommandType.Text;
-                cmd.Parameters.AddWithValue("ValorDoacao", doacao.ValorDoacao);
-                cmd.Parameters.AddWithValue("MetaArrecadacao", doacao.MetaArrecadacao);
-                cmd.Parameters.AddWithValue("ValorArrecadado", doacao.ValorArrecadado);
+                cmd.Parameters.AddWithValue("@QtdParticipantes", arrecadacao.QtdParticipantes);
+                cmd.Parameters.AddWithValue("@QtdAlimento", arrecadacao.QtdAlimento);
+                cmd.Parameters.AddWithValue("@MetaArrecadacao", arrecadacao.MetaArrecadacao);
+                cmd.Parameters.AddWithValue("@PublicoAlvo", arrecadacao.PublicoAlvo);
+
                 try
                 {
                     connection.Open();
@@ -131,29 +135,27 @@ namespace DoacaoAPI.Controllers
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] Doacao doacao)
+        public void Put(int id, [FromBody] Arrecadacao arrecadacao)
         {
-            // Update
+            //Update
 
-            using (SqlConnection connetcion = new SqlConnection(connectionString))
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                string cmdText = "UPDATE Doacoes SET ValorDoacao=@ValorDoacao, MetaArrecadacao=@MetaArrecadacao, ValorArrecadado=@ValorArrecadado WHERE Id=@Id";
-                SqlCommand cmd = new SqlCommand(cmdText, connetcion);
-                cmd.Parameters.AddWithValue("ValorDoacao", doacao.ValorDoacao);
-                cmd.Parameters.AddWithValue("MetaArrecadacao", doacao.MetaArrecadacao);
-                cmd.Parameters.AddWithValue("ValorArrecadado", doacao.ValorArrecadado);
+                string cmdText = "UPDATE Usuario SET Nome=@Nome, Sobrenome=@Sobrenome, Email=@Email, Telefone=@Telefone, DataNascimento=@DataNascimento WHERE Id=@Id";
+                SqlCommand cmd = new SqlCommand(cmdText, connection);
+                cmd.Parameters.AddWithValue("Id", arrecadacao.Id);
+                cmd.Parameters.AddWithValue("Nome", arrecadacao.QtdParticipantes);
+                cmd.Parameters.AddWithValue("Sobrenome", arrecadacao.QtdAlimento);
+                cmd.Parameters.AddWithValue("Email", arrecadacao.MetaArrecadacao);
+                cmd.Parameters.AddWithValue("Telefone", arrecadacao.PublicoAlvo);
                 try
                 {
-                    connetcion.Open();
+                    connection.Open();
                     cmd.ExecuteNonQuery();
                 }
                 catch (Exception e)
                 {
                     throw e;
-                }
-                finally
-                {
-                    connetcion.Close();
                 }
             }
         }
@@ -164,7 +166,7 @@ namespace DoacaoAPI.Controllers
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                string cmdText = "DELETE Doacoes WHERE Id=@Id";
+                string cmdText = "DELETE Arrecadacoes WHERE Id=@Id";
                 SqlCommand cmd = new SqlCommand(cmdText, connection);
                 cmd.Parameters.AddWithValue("Id", id);
                 try
@@ -175,10 +177,6 @@ namespace DoacaoAPI.Controllers
                 catch (Exception e)
                 {
                     throw e;
-                }
-                finally
-                {
-                    connection.Close();
                 }
             }
         }

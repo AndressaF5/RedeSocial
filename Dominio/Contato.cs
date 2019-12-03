@@ -10,14 +10,14 @@ namespace Dominio
         public string Telefone { get; set; }
         public string Celular { get; set; }
 
-    public void divulgar() {
-	    Console.WriteLine(":: Contato :: \n "
-			    + "Telefone:%s \n"
-			    + "Celular: %s \n",
-			    Telefone, 
-			    Celular
-			    );
-    }
+    //public void divulgar() {
+	   // Console.WriteLine(":: Contato :: \n "
+			 //   + "Telefone:%s \n"
+			 //   + "Celular: %s \n",
+			 //   Telefone, 
+			 //   Celular
+			 //   );
+    //}
 
     }
 }

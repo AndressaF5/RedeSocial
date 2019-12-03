@@ -16,8 +16,8 @@ namespace RedeSocial.Controllers
         {
             using (var client = new HttpClient())
             {
-                client.BaseAddress = new Uri("https://oficinaapi2019.azurewebsites.net");
-                var mediaType = new MediaTypeWithQualityHeaderValue("api/ValuesController");
+                client.BaseAddress = new Uri("https://localhost:44302/");
+                var mediaType = new MediaTypeWithQualityHeaderValue("application/json");
                 client.DefaultRequestHeaders.Accept.Add(mediaType);
                 var response = client.GetAsync("api/OficinaAPI").Result;
                 List<Oficina> oficinas = new List<Oficina>();
@@ -66,9 +66,9 @@ namespace RedeSocial.Controllers
             {
                 using (var client = new HttpClient())
                 {
-                    client.BaseAddress = new Uri("https://oficinaapi2019.azurewebsites.net");
+                    client.BaseAddress = new Uri("https://localhost:44302/");
                     string stringData = JsonConvert.SerializeObject(oficina);
-                    var contentData = new StringContent(stringData, System.Text.Encoding.UTF8, "api/ValuesController");
+                    var contentData = new StringContent(stringData, System.Text.Encoding.UTF8, "application/json");
                     HttpResponseMessage response = client.PostAsync("api/OficinaAPI", contentData).Result;
                     ViewBag.Message = response.Content.ReadAsStringAsync().Result;
                     return RedirectToAction(nameof(Index));

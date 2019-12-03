@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Dominio
 {
-    public class Doacao : Evento
+    public class Doacao
     {
         public int Id { get; set; }
         public float ValorDoacao { get; set; }
@@ -24,17 +24,17 @@ namespace Dominio
 		    }
 	    }
 
-	    public void divulgar() {
-            base.divulgar();
-		    Console.WriteLine(":: Doação ::\n "
-				    + "Valor doação: %.2f"
-				    + "Meta de arrecadação: %.2f"
-				    + "Valor Arrecadado: %.2f",
-				    ValorDoacao,
-				    MetaArrecadacao,
-				    ValorArrecadado
-				    );
-	    }
+	    //public void divulgar() {
+     //       base.divulgar();
+		   // Console.WriteLine(":: Doação ::\n "
+				 //   + "Valor doação: %.2f"
+				 //   + "Meta de arrecadação: %.2f"
+				 //   + "Valor Arrecadado: %.2f",
+				 //   ValorDoacao,
+				 //   MetaArrecadacao,
+				 //   ValorArrecadado
+				 //   );
+	    //}
 
 
     }

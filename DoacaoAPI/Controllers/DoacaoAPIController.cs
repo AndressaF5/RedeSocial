@@ -7,26 +7,25 @@ using Dominio;
 using System.Data.SqlClient;
 using System.Data;
 
-namespace PessoaFisicaAPI.Controllers
+namespace DoacaoAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ValuesController : ControllerBase
+    public class DoacaoAPIController : ControllerBase
     {
         string connectionString = "Server=tcp:trabalhos.database.windows.net,1433;Initial Catalog=infnettrabalhos;Persist Security Info=False;User ID=andressafsilva;Password=Porcoaranh@007;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
 
         // GET api/values
         [HttpGet]
-        public ActionResult<IEnumerable<PessoaFisica>> Get()
+        public ActionResult<IEnumerable<Doacao>> Get()
         {
             // Read
-
-            var pessoaFisicas = new List<PessoaFisica>();
+            var doacoes = new List<Doacao>();
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                var cmdText = "SELECT * FROM Usuarios";
-                SqlCommand select = new SqlCommand(cmdText, connection);
+                var cmdText = "SELECT * FROM Doacoes";
+                var select = new SqlCommand(cmdText, connection);
                 try
                 {
                     connection.Open();
@@ -34,18 +33,13 @@ namespace PessoaFisicaAPI.Controllers
                     {
                         while (reader.Read())
                         {
-                            var pessoaFisica = new PessoaFisica();
-                            pessoaFisica.Id = (int)reader["Id"];
-                            pessoaFisica.Nome = reader["Nome"].ToString();
-                            pessoaFisica.Sobrenome = reader["Sobrenome"].ToString();
-                            pessoaFisica.NomeSocial = reader["NomeSocial"].ToString();
-                            pessoaFisica.DataNascimento = (DateTime)reader["DataNascimento"];
-                            pessoaFisica.CPF = reader["CPF"].ToString();
-                            pessoaFisica.Genero = reader["Genero"].ToString();
+                            var doacao = new Doacao();
+                            doacao.Id = (int)reader["Id"];
+                            doacao.ValorDoacao = (float)reader["ValorDoacao"];
+                            doacao.MetaArrecadacao = (float)reader["MetaArrecadacao"];
+                            doacao.ValorArrecadado = (float)reader["ValorArrecadado"];
 
-
-                            pessoaFisicas.Add(pessoaFisica);
-
+                            doacoes.Add(doacao);
                         }
                     }
                 }
@@ -57,22 +51,23 @@ namespace PessoaFisicaAPI.Controllers
                 {
                     connection.Close();
                 }
-            }
 
-            return pessoaFisicas;
+                return doacoes;
+            }
         }
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public ActionResult<PessoaFisica> Get(int id)
+        public ActionResult<Doacao> Get(int id)
         {
             // Details
+
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                string sql = "SELEC Id, Nome, Sobrenome, NomeSocial, DataNascimento, CPF, Genero FROM Usuarios WHERE Id=@Id";
+                string sql = "SELECT Id, ValorDoacao, MetaArrecadacao, ValorArrecadado WHERE Doacoes Id=@Id";
                 SqlCommand cmd = new SqlCommand(sql, connection);
                 cmd.Parameters.AddWithValue("@Id", id);
-                PessoaFisica pessoaFisica = null;
+                Doacao doacao = null;
                 try
                 {
                     connection.Open();
@@ -82,14 +77,11 @@ namespace PessoaFisicaAPI.Controllers
                         {
                             if (reader.Read())
                             {
-                                pessoaFisica = new PessoaFisica();
-                                pessoaFisica.Id = (int)reader["Id"];
-                                pessoaFisica.Nome = reader["Nome"].ToString();
-                                pessoaFisica.Sobrenome = reader["Sobrenome"].ToString();
-                                pessoaFisica.NomeSocial = reader["NomeSocial"].ToString();
-                                pessoaFisica.DataNascimento = (DateTime)reader["DataNascimento"];
-                                pessoaFisica.CPF = reader["CPF"].ToString();
-                                pessoaFisica.Genero = reader["Genero"].ToString();
+                                doacao = new Doacao();
+                                doacao.Id = (int)reader["Id"];
+                                doacao.ValorDoacao = (float)reader["ValorDoacao"];
+                                doacao.MetaArrecadacao = (float)reader["MetaArrecadacao"];
+                                doacao.ValorArrecadado = (float)reader["ValorArrecadado"];
                             }
                         }
                     }
@@ -102,26 +94,25 @@ namespace PessoaFisicaAPI.Controllers
                 {
                     connection.Close();
                 }
-                return pessoaFisica;
+
+                return doacao;
             }
         }
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody] PessoaFisica pessoaFisica)
+        public void Post([FromBody] Doacao doacao)
         {
             // Create
+
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                string cmdText = "INSERT INTO Usuarios (Nome, Sobrenome, NomeSocial, DataNascimento, CPF, Genero) Values(@Nome, @Sobrenome, @NomeSocial, @DataNascimento, @CPF, @Genero)";
+                string cmdText = "INSERT INTO Doacoes (ValorDoacao, MetaArrecadacao, ValorArrecadado) VALUES (@ValorDoacao, @MetaArrecadacao, @ValorArrecadado)";
                 SqlCommand cmd = new SqlCommand(cmdText, connection);
                 cmd.CommandType = CommandType.Text;
-                cmd.Parameters.AddWithValue("@Nome", pessoaFisica.Nome);
-                cmd.Parameters.AddWithValue("@Sobrenome", pessoaFisica.Sobrenome);
-                cmd.Parameters.AddWithValue("@NomeSocail", pessoaFisica.NomeSocial);
-                cmd.Parameters.AddWithValue("@DataNascimento", pessoaFisica.DataNascimento);
-                cmd.Parameters.AddWithValue("@CPF", pessoaFisica.CPF);
-                cmd.Parameters.AddWithValue("@Genero", pessoaFisica.Genero);
+                cmd.Parameters.AddWithValue("ValorDoacao", doacao.ValorDoacao);
+                cmd.Parameters.AddWithValue("MetaArrecadacao", doacao.MetaArrecadacao);
+                cmd.Parameters.AddWithValue("ValorArrecadado", doacao.ValorArrecadado);
                 try
                 {
                     connection.Open();
@@ -140,29 +131,29 @@ namespace PessoaFisicaAPI.Controllers
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] PessoaFisica pessoaFisica)
+        public void Put(int id, [FromBody] Doacao doacao)
         {
             // Update
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                string cmdText = "UPDATE Usuarios SET Nome=@Nome, Sobrenome=@Sobrenome, NomeSocial=@NomeSocial, DataNascimento=@DataNascimento, Genero=@Genero WHERE Id=@Id";
-                SqlCommand cmd = new SqlCommand(cmdText, connection);
-                cmd.Parameters.AddWithValue("Id", pessoaFisica.Id);
-                cmd.Parameters.AddWithValue("Nome", pessoaFisica.Nome);
-                cmd.Parameters.AddWithValue("Sobrenome", pessoaFisica.Sobrenome);
-                cmd.Parameters.AddWithValue("NomeSocial", pessoaFisica.NomeSocial);
-                cmd.Parameters.AddWithValue("DataNascimento", pessoaFisica.DataNascimento);
-                cmd.Parameters.AddWithValue("CPF", pessoaFisica.CPF);
-                cmd.Parameters.AddWithValue("Genero", pessoaFisica.Genero);
 
+            using (SqlConnection connetcion = new SqlConnection(connectionString))
+            {
+                string cmdText = "UPDATE Doacoes SET ValorDoacao=@ValorDoacao, MetaArrecadacao=@MetaArrecadacao, ValorArrecadado=@ValorArrecadado WHERE Id=@Id";
+                SqlCommand cmd = new SqlCommand(cmdText, connetcion);
+                cmd.Parameters.AddWithValue("ValorDoacao", doacao.ValorDoacao);
+                cmd.Parameters.AddWithValue("MetaArrecadacao", doacao.MetaArrecadacao);
+                cmd.Parameters.AddWithValue("ValorArrecadado", doacao.ValorArrecadado);
                 try
                 {
-                    connection.Open();
+                    connetcion.Open();
                     cmd.ExecuteNonQuery();
                 }
                 catch (Exception e)
                 {
                     throw e;
+                }
+                finally
+                {
+                    connetcion.Close();
                 }
             }
         }
@@ -173,7 +164,7 @@ namespace PessoaFisicaAPI.Controllers
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                string cmdText = "DELETE Usuarios WHERE Id=@Id";
+                string cmdText = "DELETE Doacoes WHERE Id=@Id";
                 SqlCommand cmd = new SqlCommand(cmdText, connection);
                 cmd.Parameters.AddWithValue("Id", id);
                 try
@@ -184,6 +175,10 @@ namespace PessoaFisicaAPI.Controllers
                 catch (Exception e)
                 {
                     throw e;
+                }
+                finally
+                {
+                    connection.Close();
                 }
             }
         }

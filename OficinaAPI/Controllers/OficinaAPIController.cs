@@ -7,27 +7,26 @@ using Dominio;
 using System.Data.SqlClient;
 using System.Data;
 
-namespace ArrecadacaoAPI.Controllers
+namespace EventoAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ValuesController : ControllerBase
+    public class OficinaAPIController : ControllerBase
     {
         string connectionString = "Server=tcp:trabalhos.database.windows.net,1433;Initial Catalog=infnettrabalhos;Persist Security Info=False;User ID=andressafsilva;Password=Porcoaranh@007;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
 
         // GET api/values
         [HttpGet]
-        public ActionResult<IEnumerable<Arrecadacao>> Get()
+        public ActionResult<IEnumerable<Oficina>> Get()
         {
-            //Read
+            // Read
 
-            var arrecadacoes = new List<Arrecadacao>();
+            var oficinas = new List<Oficina>();
 
-            using (var connection = new SqlConnection(connectionString))
+            using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                var cmdText = "SELECT * FROM Arrecadacoes";
-                var select = new SqlCommand(cmdText, connection);
-
+                var cmdText = "SELECT * FROM Oficinas";
+                SqlCommand select = new SqlCommand(cmdText, connection);
                 try
                 {
                     connection.Open();
@@ -35,41 +34,40 @@ namespace ArrecadacaoAPI.Controllers
                     {
                         while (reader.Read())
                         {
-                            var arrecadacao = new Arrecadacao();
-                            arrecadacao.Id = (int)reader["Id"];
-                            arrecadacao.QtdParticipantes = (int)reader["QtdParticipantes"];
-                            arrecadacao.QtdAlimento = (float)reader["QtdAlimento"];
-                            arrecadacao.MetaArrecadacao = (float)reader["MetaArrecadacao"];
-                            arrecadacao.PublicoAlvo = (int)reader["PublicoAlvo"];
+                            var oficina = new Oficina();
+                            oficina.Id = (int)reader["Id"];
+                            oficina.NomeOficina = reader["NomeOficina"].ToString();
+                            oficina.QtdParticipantes = (int)reader["QtdParticipante"];
 
-                            arrecadacoes.Add(arrecadacao);
+                            oficinas.Add(oficina);
 
                         }
-
                     }
+                }
+                catch (Exception e)
+                {
+                    throw e;
                 }
                 finally
                 {
                     connection.Close();
                 }
-
             }
-            return arrecadacoes;
+
+            return oficinas;
         }
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public ActionResult<Arrecadacao> Get(int id)
+        public ActionResult<Oficina> Get(int id)
         {
             // Details
-
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                string sql = "SELECT Id, QtdParticipantes, QtdAlimento, MetaArrecadacao, PublicoAlvo FROM Arrecadacoes Where Id=@Id";
+                string sql = "SELEC Id, NomeOficina, QtdParticipante FROM Oficinas WHERE Id=@Id";
                 SqlCommand cmd = new SqlCommand(sql, connection);
                 cmd.Parameters.AddWithValue("@Id", id);
-                Arrecadacao arrecadacao = null;
-
+                Oficina oficina = null;
                 try
                 {
                     connection.Open();
@@ -79,12 +77,10 @@ namespace ArrecadacaoAPI.Controllers
                         {
                             if (reader.Read())
                             {
-                                arrecadacao = new Arrecadacao();
-                                arrecadacao.Id = (int)reader["Id"];
-                                arrecadacao.QtdParticipantes = (int)reader["QtdParticipantes"];
-                                arrecadacao.QtdAlimento = (float)reader["QtdAlimento"];
-                                arrecadacao.MetaArrecadacao = (float)reader["MetaArrecadacao"];
-                                arrecadacao.PublicoAlvo = (int)reader["PublicoAlvo"];
+                                oficina = new Oficina();
+                                oficina.Id = (int)reader["Id"];
+                                oficina.NomeOficina = reader["NomeOficina"].ToString();
+                                oficina.QtdParticipantes = (int)reader["QtdParticipantes"];
                             }
                         }
                     }
@@ -97,26 +93,23 @@ namespace ArrecadacaoAPI.Controllers
                 {
                     connection.Close();
                 }
-                return arrecadacao;
+                return oficina;
             }
         }
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody] Arrecadacao arrecadacao)
+        public void Post([FromBody] Oficina oficina)
         {
-            //create
+            // Create
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                string cmdTex = "INSERT INTO Arrecadacao (QtdParticipantes, QtdAlimento, MetaArrecadacao) VALUES(@QtdParticipantes, @QtdAlimento, @MetaArrecadacao)";
-                SqlCommand cmd = new SqlCommand(cmdTex, connection);
+                string cmdText = "INSERT INTO Oficinas (NomeOficina, QtdParticipantes) Values(@NomeOficina ,@QtdParticipantes)";
+                SqlCommand cmd = new SqlCommand(cmdText, connection);
                 cmd.CommandType = CommandType.Text;
-                cmd.Parameters.AddWithValue("@QtdParticipantes", arrecadacao.QtdParticipantes);
-                cmd.Parameters.AddWithValue("@QtdAlimento", arrecadacao.QtdAlimento);
-                cmd.Parameters.AddWithValue("@MetaArrecadacao", arrecadacao.MetaArrecadacao);
-                cmd.Parameters.AddWithValue("@PublicoAlvo", arrecadacao.PublicoAlvo);
-
+                cmd.Parameters.AddWithValue("@NomeOficina", oficina.NomeOficina);
+                cmd.Parameters.AddWithValue("@QtdParticipantes", oficina.QtdParticipantes);
                 try
                 {
                     connection.Open();
@@ -135,19 +128,17 @@ namespace ArrecadacaoAPI.Controllers
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] Arrecadacao arrecadacao)
+        public void Put(int id, [FromBody] Oficina oficina)
         {
-            //Update
+            // Update
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                string cmdText = "UPDATE Usuario SET Nome=@Nome, Sobrenome=@Sobrenome, Email=@Email, Telefone=@Telefone, DataNascimento=@DataNascimento WHERE Id=@Id";
+                string cmdText = "UPDATE Oficinas SET NomeOficina=@NomeOficina, QtdParticipantes=@QtdParticipantes WHERE Id=@Id";
                 SqlCommand cmd = new SqlCommand(cmdText, connection);
-                cmd.Parameters.AddWithValue("Id", arrecadacao.Id);
-                cmd.Parameters.AddWithValue("Nome", arrecadacao.QtdParticipantes);
-                cmd.Parameters.AddWithValue("Sobrenome", arrecadacao.QtdAlimento);
-                cmd.Parameters.AddWithValue("Email", arrecadacao.MetaArrecadacao);
-                cmd.Parameters.AddWithValue("Telefone", arrecadacao.PublicoAlvo);
+                cmd.Parameters.AddWithValue("Id", oficina.Id);
+                cmd.Parameters.AddWithValue("NomeOficina", oficina.NomeOficina);
+                cmd.Parameters.AddWithValue("QtdParticipantes", oficina.QtdParticipantes);
                 try
                 {
                     connection.Open();
@@ -166,7 +157,7 @@ namespace ArrecadacaoAPI.Controllers
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                string cmdText = "DELETE Arrecadacoes WHERE Id=@Id";
+                string cmdText = "DELETE Oficinas WHERE Id=@Id";
                 SqlCommand cmd = new SqlCommand(cmdText, connection);
                 cmd.Parameters.AddWithValue("Id", id);
                 try

@@ -16,6 +16,7 @@ namespace Banco
         public DbSet<Oficina> Oficinas { get; set; }
         public DbSet<PessoaFisica> PessoasFisicas { get; set; }
         public DbSet<PessoaJuridica> PessoasJuridicas { get; set; }
+
         public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<UsuarioEvento> UsuariosEventos { get; set; }
 

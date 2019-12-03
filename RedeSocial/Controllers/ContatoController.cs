@@ -16,8 +16,8 @@ namespace RedeSocial.Controllers
         {
             using (var client = new HttpClient())
             {
-                client.BaseAddress = new Uri("https://contatoapi2019.azurewebsites.net");
-                var mediaType = new MediaTypeWithQualityHeaderValue("api/ValuesController");
+                client.BaseAddress = new Uri("https://localhost:44302/");
+                var mediaType = new MediaTypeWithQualityHeaderValue("application/json");
                 client.DefaultRequestHeaders.Accept.Add(mediaType);
                 var response = client.GetAsync("api/ContatoAPI").Result;
                 List<Contato> contatos = new List<Contato>();
@@ -66,9 +66,9 @@ namespace RedeSocial.Controllers
             {
                 using (var client = new HttpClient())
                 {
-                    client.BaseAddress = new Uri("https://contatoapi2019.azurewebsites.net");
+                    client.BaseAddress = new Uri("https://localhost:44302/");
                     string stringData = JsonConvert.SerializeObject(contato);
-                    var contentData = new StringContent(stringData, System.Text.Encoding.UTF8, "api/ValuesController");
+                    var contentData = new StringContent(stringData, System.Text.Encoding.UTF8, "applicationjson");
                     HttpResponseMessage response = client.PostAsync("api/ContatoAPI", contentData).Result;
                     ViewBag.Message = response.Content.ReadAsStringAsync().Result;
                     return RedirectToAction(nameof(Index));

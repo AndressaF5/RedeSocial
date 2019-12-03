@@ -11,7 +11,7 @@ namespace PessoaJuridicaAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ValuesController : ControllerBase
+    public class PessoaJuridicaAPIController : ControllerBase
     {
         string connectionString = "Server=tcp:trabalhos.database.windows.net,1433;Initial Catalog=infnettrabalhos;Persist Security Info=False;User ID=andressafsilva;Password=Porcoaranh@007;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
 
@@ -25,7 +25,7 @@ namespace PessoaJuridicaAPI.Controllers
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                var cmdText = "SELECT * FROM Usuarios";
+                var cmdText = "SELECT * FROM PessoasJuridicas";
                 SqlCommand select = new SqlCommand(cmdText, connection);
                 try
                 {
@@ -71,7 +71,7 @@ namespace PessoaJuridicaAPI.Controllers
             // Details
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                string sql = "SELEC Id, NomeEmpresa, CNPJ, RazaoSocial, Rua, Bairro, Cidade, UF, CEP, Complemento FROM Usuarios WHERE Id=@Id";
+                string sql = "SELEC Id, NomeEmpresa, CNPJ, RazaoSocial, Rua, Bairro, Cidade, UF, CEP, Complemento FROM PessoasJuridicas WHERE Id=@Id";
                 SqlCommand cmd = new SqlCommand(sql, connection);
                 cmd.Parameters.AddWithValue("@Id", id);
                 PessoaJuridica pessoaJuridica = null;
@@ -119,7 +119,7 @@ namespace PessoaJuridicaAPI.Controllers
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                string cmdText = "INSERT INTO Usuarios (NomeEmpresa, CNPJ, RazaoSocial, Rua, Bairro, Cidade, UF, CEP, Complemento) Values(@NomeEmpresa, @CNPJ, @RazaoSocial, @Rua, @Bairro, @Cidade, @UF, @CEP, @Complemento, @Rua, @Bairro, @Cidade, @UF, @CEP, @Complemento)";
+                string cmdText = "INSERT INTO PessoasJuridicas (NomeEmpresa, CNPJ, RazaoSocial, Rua, Bairro, Cidade, UF, CEP, Complemento) Values(@NomeEmpresa, @CNPJ, @RazaoSocial, @Rua, @Bairro, @Cidade, @UF, @CEP, @Complemento, @Rua, @Bairro, @Cidade, @UF, @CEP, @Complemento)";
                 SqlCommand cmd = new SqlCommand(cmdText, connection);
                 cmd.CommandType = CommandType.Text;
                 cmd.Parameters.AddWithValue("@NomeEmpresa", pessoaJuridica.NomeEmpresa);
@@ -155,7 +155,7 @@ namespace PessoaJuridicaAPI.Controllers
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                string cmdText = "UPDATE Usuarios SET NomeEmpresa=@NomeEmpresa, CNPJ=@CNPJ, RazaoSocial=@RazaoSocial, Rua=@Rua, Bairro=@Bairro, Cidade=@Cidade, UF=@UF, CEP=@CEP, Complemento=@Complemento WHERE Id=@Id";
+                string cmdText = "UPDATE PessoasJuridicas SET NomeEmpresa=@NomeEmpresa, CNPJ=@CNPJ, RazaoSocial=@RazaoSocial, Rua=@Rua, Bairro=@Bairro, Cidade=@Cidade, UF=@UF, CEP=@CEP, Complemento=@Complemento WHERE Id=@Id";
                 SqlCommand cmd = new SqlCommand(cmdText, connection);
                 cmd.Parameters.AddWithValue("Id", pessoaJuridica.Id);
                 cmd.Parameters.AddWithValue("NomeEmpresa", pessoaJuridica.NomeEmpresa);
@@ -185,7 +185,7 @@ namespace PessoaJuridicaAPI.Controllers
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                string cmdText = "DELETE Usuarios WHERE Id=@Id";
+                string cmdText = "DELETE PessoasJuridicas WHERE Id=@Id";
                 SqlCommand cmd = new SqlCommand(cmdText, connection);
                 cmd.Parameters.AddWithValue("Id", id);
                 try

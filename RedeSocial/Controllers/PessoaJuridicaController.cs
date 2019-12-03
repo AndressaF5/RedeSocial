@@ -19,8 +19,8 @@ namespace RedeSocial.Controllers
         {
             using (var client = new HttpClient())
             {
-                client.BaseAddress = new Uri("https://pessoajuridicaapi2019.azurewebsites.net");
-                var mediaTyper = new MediaTypeWithQualityHeaderValue("api/ValuesController");
+                client.BaseAddress = new Uri("https://localhost:44302/");
+                var mediaTyper = new MediaTypeWithQualityHeaderValue("application/json");
                 client.DefaultRequestHeaders.Accept.Add(mediaTyper);
                 var response = client.GetAsync("api/PessoaJuridicaAPI").Result;
                 List<PessoaJuridica> pessoasJuridicas = new List<PessoaJuridica>();
@@ -69,9 +69,9 @@ namespace RedeSocial.Controllers
             {
                 using (var client = new HttpClient())
                 {
-                    client.BaseAddress = new Uri("https://pessoajuridicaapi2019.azurewebsites.net");
+                    client.BaseAddress = new Uri("https://localhost:44302/");
                     string stringData = JsonConvert.SerializeObject(pessoaJuridica);
-                    var contentData = new StringContent(stringData, System.Text.Encoding.UTF8, "api/ValuesController");
+                    var contentData = new StringContent(stringData, System.Text.Encoding.UTF8, "application/json");
                     HttpResponseMessage response = client.PostAsync("api/PessoaJuridicaAPI", contentData).Result;
                     ViewBag.Message = response.Content.ReadAsStringAsync().Result;
                     return RedirectToAction(nameof(Index));

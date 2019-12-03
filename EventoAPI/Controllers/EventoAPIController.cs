@@ -11,17 +11,17 @@ namespace EventoAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ValuesController : ControllerBase
+    public class EventoAPIController : ControllerBase
     {
         string connectionString = "Server=tcp:trabalhos.database.windows.net,1433;Initial Catalog=infnettrabalhos;Persist Security Info=False;User ID=andressafsilva;Password=Porcoaranh@007;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
 
         // GET api/values
         [HttpGet]
-        public ActionResult<IEnumerable<Oficina>> Get()
+        public ActionResult<IEnumerable<Evento>> Get()
         {
             // Read
 
-            var eventos = new List<Oficina>();
+            var eventos = new List<Evento>();
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -34,21 +34,15 @@ namespace EventoAPI.Controllers
                     {
                         while (reader.Read())
                         {
-                            var evento = new Oficina();
+                            var evento = new Evento();
                             evento.Id = (int)reader["Id"];
                             evento.NomeAtividade = reader["NomeAtividade"].ToString();
                             evento.Data = (DateTime)reader["Data"];
                             evento.Hora = (DateTime)reader["Hora"];
                             evento.Categoria = reader["Categoria"].ToString();
                             evento.Descricao = reader["Descricao"].ToString();
-                            evento.NomeOficina = reader["NomeOficina"].ToString();
-                            evento.QtdParticipantes = (int)reader["QtdParticipantes"];
-                            evento.Endereco.Rua = reader["Rua"].ToString();
-                            evento.Endereco.Bairro = reader["Bairro"].ToString();
-                            evento.Endereco.Cidade = reader["Cidade"].ToString();
-                            evento.Endereco.UF = reader["UF"].ToString();
-                            evento.Endereco.CEP = reader["CEP"].ToString();
-                            evento.Endereco.Complemento = reader["Complemento"].ToString();
+
+
 
                             eventos.Add(evento);
 
@@ -70,15 +64,15 @@ namespace EventoAPI.Controllers
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public ActionResult<Oficina> Get(int id)
+        public ActionResult<Evento> Get(int id)
         {
             // Details
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                string sql = "SELEC Id, NomeAtividade, Data, Hora, Categoria, Descricao, NomeOficina, QtdParticipantes, Rua, Bairro, Cidade, UF, CEP, Complemento FROM Eventos WHERE Id=@Id";
+                string sql = "SELEC Id, Nomeatividade, Data, Hora, Categoria, Descricao FROM Eventos WHERE Id=@Id";
                 SqlCommand cmd = new SqlCommand(sql, connection);
                 cmd.Parameters.AddWithValue("@Id", id);
-                Oficina evento = null;
+                Evento evento = null;
                 try
                 {
                     connection.Open();
@@ -88,21 +82,14 @@ namespace EventoAPI.Controllers
                         {
                             if (reader.Read())
                             {
-                                evento = new Oficina();
+                                evento = new Evento();
                                 evento.Id = (int)reader["Id"];
                                 evento.NomeAtividade = reader["NomeAtividade"].ToString();
                                 evento.Data = (DateTime)reader["Data"];
                                 evento.Hora = (DateTime)reader["Hora"];
                                 evento.Categoria = reader["Categoria"].ToString();
                                 evento.Descricao = reader["Descricao"].ToString();
-                                evento.NomeOficina = reader["NomeOficina"].ToString();
-                                evento.QtdParticipantes = (int)reader["QtdParticipantes"];
-                                evento.Endereco.Rua = reader["Rua"].ToString();
-                                evento.Endereco.Bairro = reader["Bairro"].ToString();
-                                evento.Endereco.Cidade = reader["Cidade"].ToString();
-                                evento.Endereco.UF = reader["UF"].ToString();
-                                evento.Endereco.CEP = reader["CEP"].ToString();
-                                evento.Endereco.Complemento = reader["Complemento"].ToString();
+
                             }
                         }
                     }
@@ -121,28 +108,22 @@ namespace EventoAPI.Controllers
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody] Oficina evento)
+        public void Post([FromBody] Evento evento)
         {
             // Create
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                string cmdText = "INSERT INTO Usuario (NomeAtividade, Data, Hora, Categoria, Descricao, NomeOficina, QtdParticipantes, Rua, Bairro, Cidade, UF, CEP, Complemento) Values(@NomeAtividade, @Data, @Hora, @Categoria, @Descricao, @NomeOficina, @QtdParticipantes, @Rua, @Bairro, @Cidade, @UF, @CEP, @Complemento)";
+                string cmdText = "INSERT INTO Eventos (NomeAtividade, Data, Hora, Categoria, Descricao) Values(@NomeAtividade, @Data, @Hora, @Categoria, @Descricao)";
                 SqlCommand cmd = new SqlCommand(cmdText, connection);
                 cmd.CommandType = CommandType.Text;
-                cmd.Parameters.AddWithValue("@NomeAtividade", evento.NomeAtividade);
-                cmd.Parameters.AddWithValue("@Data", evento.Data);
-                cmd.Parameters.AddWithValue("@Hora", evento.Hora);
-                cmd.Parameters.AddWithValue("@Categoria", evento.Categoria);
-                cmd.Parameters.AddWithValue("@Descricao", evento.Descricao);
-                cmd.Parameters.AddWithValue("@NomeOficina", evento.NomeOficina);
-                cmd.Parameters.AddWithValue("@QtdParticipantes", evento.QtdParticipantes);
-                cmd.Parameters.AddWithValue("@Rua", evento.Endereco.Rua);
-                cmd.Parameters.AddWithValue("@Bairro", evento.Endereco.Bairro);
-                cmd.Parameters.AddWithValue("@Cidade", evento.Endereco.Cidade);
-                cmd.Parameters.AddWithValue("@UF", evento.Endereco.UF);
-                cmd.Parameters.AddWithValue("@CEP", evento.Endereco.CEP);
-                cmd.Parameters.AddWithValue("@Complemento", evento.Endereco.Complemento);
+
+                cmd.Parameters.AddWithValue("@NomeOficina", evento.NomeAtividade);
+                cmd.Parameters.AddWithValue("@QtdParticipantes", evento.Data);
+                cmd.Parameters.AddWithValue("@QtdParticipantes", evento.Hora);
+                cmd.Parameters.AddWithValue("@QtdParticipantes", evento.Categoria);
+                cmd.Parameters.AddWithValue("@QtdParticipantes", evento.Descricao);
+
                 try
                 {
                     connection.Open();
@@ -161,28 +142,21 @@ namespace EventoAPI.Controllers
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] Oficina evento)
+        public void Put(int id, [FromBody] Evento evento)
         {
             // Update
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                string cmdText = "UPDATE Eventos SET NomeAtividade=@NomeAtividade, Data=@Data, Hora=@Hora, Categoria=@Categoria, Descricao=@Descricao, NomeOficina=@NomeOficina, QtdParticipantes=@QtdParticipantes, Rua=@Rua, Bairro=@Bairro, Cidade=@Cidade, UF=@UF, CEP=@CEP, Complemento=@Complemento WHERE Id=@Id";
+                string cmdText = "UPDATE Eventos SET NomeAtividade=@NomeAtividade, Data=@Data, Hora=@Hora, Categoria=@Categoria, Descricao=@Descricao WHERE Id=@Id";
                 SqlCommand cmd = new SqlCommand(cmdText, connection);
                 cmd.Parameters.AddWithValue("Id", evento.Id);
-                cmd.Parameters.AddWithValue("NomeAtividade", evento.NomeAtividade);
-                cmd.Parameters.AddWithValue("Data", evento.Data);
-                cmd.Parameters.AddWithValue("Hora", evento.Hora);
-                cmd.Parameters.AddWithValue("Categoria", evento.Categoria);
-                cmd.Parameters.AddWithValue("Descricao", evento.Descricao);
-                cmd.Parameters.AddWithValue("NomeOficina", evento.NomeOficina);
-                cmd.Parameters.AddWithValue("QtdParticipantes", evento.QtdParticipantes);
-                cmd.Parameters.AddWithValue("@Rua", evento.Endereco.Rua);
-                cmd.Parameters.AddWithValue("@Bairro", evento.Endereco.Bairro);
-                cmd.Parameters.AddWithValue("@Cidade", evento.Endereco.Cidade);
-                cmd.Parameters.AddWithValue("@UF", evento.Endereco.UF);
-                cmd.Parameters.AddWithValue("@CEP", evento.Endereco.CEP);
-                cmd.Parameters.AddWithValue("@Complemento", evento.Endereco.Complemento);
+                cmd.Parameters.AddWithValue("NomeOficina", evento.NomeAtividade);
+                cmd.Parameters.AddWithValue("QtdParticipantes", evento.Data);
+                cmd.Parameters.AddWithValue("@QtdParticipantes", evento.Hora);
+                cmd.Parameters.AddWithValue("@QtdParticipantes", evento.Categoria);
+                cmd.Parameters.AddWithValue("@QtdParticipantes", evento.Descricao);
+
                 try
                 {
                     connection.Open();

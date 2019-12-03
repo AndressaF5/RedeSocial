@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Dominio
 {
-    public class PessoaJuridica : Usuario
+    public class PessoaJuridica
     {
         public int Id { get; set; }
         public string NomeEmpresa { get; set; }
@@ -13,17 +13,17 @@ namespace Dominio
         public Endereco Endereco { get; set; }
 
         
-	    public void divulgar() {
-		    base.divulgar();
-		    Console.WriteLine(":: Dados da empresa ::\n"
-				    + "Nome da empresa: %s \n"
-				    + "Razao Social: %s \n"
-				    + "CNPJ: %s \n",
-				    NomeEmpresa,
-				    RazaoSocial,
-				    CNPJ
-				    );
-	    }
+	    //public void divulgar() {
+		   // base.divulgar();
+		   // Console.WriteLine(":: Dados da empresa ::\n"
+				 //   + "Nome da empresa: %s \n"
+				 //   + "Razao Social: %s \n"
+				 //   + "CNPJ: %s \n",
+				 //   NomeEmpresa,
+				 //   RazaoSocial,
+				 //   CNPJ
+				 //   );
+	    //}
 	
     }
 }
