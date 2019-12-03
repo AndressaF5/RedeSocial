@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Banco;
 using Dominio;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -23,14 +20,14 @@ namespace RedeSocial.Controllers
                 var mediaType = new MediaTypeWithQualityHeaderValue("api/ValuesController");
                 client.DefaultRequestHeaders.Accept.Add(mediaType);
                 var response = client.GetAsync("api/EnderecoAPI").Result;
-                List<Evento> eventos = new List<Evento>();
+                List<Endereco> enderecos = new List<Endereco>();
                 if (response.IsSuccessStatusCode)
                 {
                     string json = await response.Content.ReadAsStringAsync();
-                    eventos = JsonConvert.DeserializeObject<List<Evento>>(json);
+                    enderecos = JsonConvert.DeserializeObject<List<Endereco>>(json);
                 }
 
-                return View(eventos);
+                return View(enderecos);
             }
         }
 

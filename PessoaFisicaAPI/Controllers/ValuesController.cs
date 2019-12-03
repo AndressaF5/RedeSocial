@@ -111,7 +111,6 @@ namespace PessoaFisicaAPI.Controllers
         public void Post([FromBody] PessoaFisica pessoaFisica)
         {
             // Create
-
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 string cmdText = "INSERT INTO Usuarios (Nome, Sobrenome, NomeSocial, DataNascimento, CPF, Genero) Values(@Nome, @Sobrenome, @NomeSocial, @DataNascimento, @CPF, @Genero)";
@@ -144,7 +143,6 @@ namespace PessoaFisicaAPI.Controllers
         public void Put(int id, [FromBody] PessoaFisica pessoaFisica)
         {
             // Update
-
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 string cmdText = "UPDATE Usuarios SET Nome=@Nome, Sobrenome=@Sobrenome, NomeSocial=@NomeSocial, DataNascimento=@DataNascimento, Genero=@Genero WHERE Id=@Id";
