@@ -6,6 +6,7 @@ using Dominio;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Newtonsoft.Json;
+using Microsoft.EntityFrameworkCore;
 
 namespace RedeSocial.Controllers
 {
@@ -32,22 +33,33 @@ namespace RedeSocial.Controllers
         }
 
         // GET: Endereco/Details/5
-        //public async Task<IActionResult> Details(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-        //    var endereco = await _context.Enderecos
-        //        .FirstOrDefaultAsync(m => m.Id == id);
-        //    if (endereco == null)
-        //    {
-        //        return NotFound();
-        //    }
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri($"https://localhost:44302/{id}");
+                var mediaType = new MediaTypeWithQualityHeaderValue("application/json");
+                client.DefaultRequestHeaders.Accept.Add(mediaType);
+                var response = client.GetAsync($"api/EnderecoAPI/{id}").Result;
+                Endereco endereco = new Endereco();
+                if (response.IsSuccessStatusCode)
+                {
+                    string json = await response.Content.ReadAsStringAsync();
+                    endereco = JsonConvert.DeserializeObject<Endereco>(json);
+                }
+                if (endereco == null)
+                {
+                    return NotFound();
+                }
 
-        //    return View(endereco);
-        //}
+                return View(endereco);
+            }
+        }
 
         // GET: Endereco/Create
         public IActionResult Create()
@@ -56,6 +68,8 @@ namespace RedeSocial.Controllers
         }
 
         // POST: Endereco/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Rua,Bairro,Cidade,UF,CEP,Complemento")] Endereco endereco)
@@ -66,96 +80,121 @@ namespace RedeSocial.Controllers
                 {
                     client.BaseAddress = new Uri("https://localhost:44302/");
                     string stringData = JsonConvert.SerializeObject(endereco);
-                    var contentData = new StringContent(stringData, System.Text.Encoding.UTF8, "applicationjson");
+                    var contentData = new StringContent(stringData, System.Text.Encoding.UTF8, "application/json");
                     HttpResponseMessage response = client.PostAsync("api/EnderecoAPI", contentData).Result;
                     ViewBag.Message = response.Content.ReadAsStringAsync().Result;
                     return RedirectToAction(nameof(Index));
                 }
+
             }
             return View(endereco);
         }
 
         // GET: Endereco/Edit/5
-        //public async Task<IActionResult> Edit(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-        //    var endereco = await _context.Enderecos.FindAsync(id);
-        //    if (endereco == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return View(endereco);
-        //}
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("https://localhost:44302/");
+                var mediaType = new MediaTypeWithQualityHeaderValue("application/json");
+                client.DefaultRequestHeaders.Accept.Add(mediaType);
+                var response = client.GetAsync($"api/EnderecoAPI/{id}").Result;
+                Endereco endereco = new Endereco();
+                if (response.IsSuccessStatusCode)
+                {
+                    string json = await response.Content.ReadAsStringAsync();
+                    endereco = JsonConvert.DeserializeObject<Endereco>(json);
+                }
+                if (endereco == null)
+                {
+                    return NotFound();
+                }
+                return View(endereco);
+            }
+        }
 
         // POST: Endereco/Edit/5
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Edit(int id, [Bind("Id,Rua,Bairro,Cidade,UF,CEP,Complemento")] Endereco endereco)
-        //{
-        //    if (id != endereco.Id)
-        //    {
-        //        return NotFound();
-        //    }
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Rua,Bairro,Cidade,UF,CEP,Complemento")] Endereco endereco)
+        {
+            if (id != endereco.Id)
+            {
+                return NotFound();
+            }
 
-        //    if (ModelState.IsValid)
-        //    {
-        //        try
-        //        {
-        //            _context.Update(endereco);
-        //            await _context.SaveChangesAsync();
-        //        }
-        //        catch (DbUpdateConcurrencyException)
-        //        {
-        //            if (!EnderecoExists(endereco.Id))
-        //            {
-        //                return NotFound();
-        //            }
-        //            else
-        //            {
-        //                throw;
-        //            }
-        //        }
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    return View(endereco);
-        //}
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    using (var client = new HttpClient())
+                    {
+                        client.BaseAddress = new Uri("https://localhost:44302/");
+                        string stringData = JsonConvert.SerializeObject(endereco);
+                        var contentData = new StringContent(stringData, System.Text.Encoding.UTF8, "application/json");
+                        HttpResponseMessage response = client.PutAsync($"api/EnderecoAPI/{id}", contentData).Result;
+                        ViewBag.Message = response.Content.ReadAsStringAsync().Result;
+                    }
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    return NotFound();
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(endereco);
+        }
 
         // GET: Endereco/Delete/5
-        //public async Task<IActionResult> Delete(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-        //    var endereco = await _context.Enderecos
-        //        .FirstOrDefaultAsync(m => m.Id == id);
-        //    if (endereco == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(endereco);
-        //}
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("https://localhost:44302/");
+                var mediaType = new MediaTypeWithQualityHeaderValue("application/json");
+                client.DefaultRequestHeaders.Accept.Add(mediaType);
+                var response = client.GetAsync($"api/EnderecoAPI/{id}").Result;
+                Endereco endereco = new Endereco();
+                if (response.IsSuccessStatusCode)
+                {
+                    string json = await response.Content.ReadAsStringAsync();
+                    endereco = JsonConvert.DeserializeObject<Endereco>(json);
+                }
+                if (endereco == null)
+                {
+                    return NotFound();
+                }
+                return View(endereco);
+            }
+        }
 
         // POST: Endereco/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> DeleteConfirmed(int id)
-        //{
-        //    var endereco = await _context.Enderecos.FindAsync(id);
-        //    _context.Enderecos.Remove(endereco);
-        //    await _context.SaveChangesAsync();
-        //    return RedirectToAction(nameof(Index));
-        //}
-
-        //private bool EnderecoExists(int id)
-        //{
-        //    return _context.Enderecos.Any(e => e.Id == id);
-        //}
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            using (var client = new HttpClient())
+            {
+                Endereco endereco = new Endereco();
+                client.BaseAddress = new Uri("https://localhost:44302/");
+                string stringData = JsonConvert.SerializeObject(endereco);
+                var contentData = new StringContent(stringData, System.Text.Encoding.UTF8, "application/json");
+                HttpResponseMessage response = client.DeleteAsync($"api/EnderecoAPI/{id}").Result;
+                ViewBag.Message = response.Content.ReadAsStringAsync().Result;
+            }
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

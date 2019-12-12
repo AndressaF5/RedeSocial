@@ -6,6 +6,7 @@ using Dominio;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Newtonsoft.Json;
+using Microsoft.EntityFrameworkCore;
 
 namespace RedeSocial.Controllers
 {
@@ -20,34 +21,45 @@ namespace RedeSocial.Controllers
                 var mediaType = new MediaTypeWithQualityHeaderValue("application/json");
                 client.DefaultRequestHeaders.Accept.Add(mediaType);
                 var response = client.GetAsync("api/OficinaAPI").Result;
-                List<Oficina> oficinas = new List<Oficina>();
+                List<Oficina> oficina = new List<Oficina>();
                 if (response.IsSuccessStatusCode)
                 {
                     string json = await response.Content.ReadAsStringAsync();
-                    oficinas = JsonConvert.DeserializeObject<List<Oficina>>(json);
+                    oficina = JsonConvert.DeserializeObject<List<Oficina>>(json);
                 }
 
-                return View(oficinas);
+                return View(oficina);
             }
         }
 
         // GET: Oficina/Details/5
-        //public async Task<IActionResult> Details(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-        //    var oficina = await _context.Oficinas
-        //        .FirstOrDefaultAsync(m => m.Id == id);
-        //    if (oficina == null)
-        //    {
-        //        return NotFound();
-        //    }
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri($"https://localhost:44302/{id}");
+                var mediaType = new MediaTypeWithQualityHeaderValue("application/json");
+                client.DefaultRequestHeaders.Accept.Add(mediaType);
+                var response = client.GetAsync($"api/OficinaAPI/{id}").Result;
+                Oficina oficina = new Oficina();
+                if (response.IsSuccessStatusCode)
+                {
+                    string json = await response.Content.ReadAsStringAsync();
+                    oficina = JsonConvert.DeserializeObject<Oficina>(json);
+                }
+                if (oficina == null)
+                {
+                    return NotFound();
+                }
 
-        //    return View(oficina);
-        //}
+                return View(oficina);
+            }
+        }
 
         // GET: Oficina/Create
         public IActionResult Create()
@@ -60,7 +72,7 @@ namespace RedeSocial.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,QtdPrticipantes,NomeAtividade,Data,Hora,Categoria,Descricao")] Oficina oficina)
+        public async Task<IActionResult> Create([Bind("Id,NomeOficina,QtdParticipantes")] Oficina oficina)
         {
             if (ModelState.IsValid)
             {
@@ -73,93 +85,116 @@ namespace RedeSocial.Controllers
                     ViewBag.Message = response.Content.ReadAsStringAsync().Result;
                     return RedirectToAction(nameof(Index));
                 }
+
             }
             return View(oficina);
         }
 
         // GET: Oficina/Edit/5
-        //public async Task<IActionResult> Edit(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-        //    var oficina = await _context.Oficinas.FindAsync(id);
-        //    if (oficina == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return View(oficina);
-        //}
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("https://localhost:44302/");
+                var mediaType = new MediaTypeWithQualityHeaderValue("application/json");
+                client.DefaultRequestHeaders.Accept.Add(mediaType);
+                var response = client.GetAsync($"api/OficinaAPI/{id}").Result;
+                Oficina oficina = new Oficina();
+                if (response.IsSuccessStatusCode)
+                {
+                    string json = await response.Content.ReadAsStringAsync();
+                    oficina = JsonConvert.DeserializeObject<Oficina>(json);
+                }
+                if (oficina == null)
+                {
+                    return NotFound();
+                }
+                return View(oficina);
+            }
+        }
 
         // POST: Oficina/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Edit(int id, [Bind("Id,QtdPrticipantes,NomeAtividade,Data,Hora,Categoria,Descricao")] Oficina oficina)
-        //{
-        //    if (id != oficina.Id)
-        //    {
-        //        return NotFound();
-        //    }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,NomeOficina,QtdParticipantes")] Oficina oficina)
+        {
+            if (id != oficina.Id)
+            {
+                return NotFound();
+            }
 
-        //    if (ModelState.IsValid)
-        //    {
-        //        try
-        //        {
-        //            _context.Update(oficina);
-        //            await _context.SaveChangesAsync();
-        //        }
-        //        catch (DbUpdateConcurrencyException)
-        //        {
-        //            if (!OficinaExists(oficina.Id))
-        //            {
-        //                return NotFound();
-        //            }
-        //            else
-        //            {
-        //                throw;
-        //            }
-        //        }
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    return View(oficina);
-        //}
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    using (var client = new HttpClient())
+                    {
+                        client.BaseAddress = new Uri("https://localhost:44302/");
+                        string stringData = JsonConvert.SerializeObject(oficina);
+                        var contentData = new StringContent(stringData, System.Text.Encoding.UTF8, "application/json");
+                        HttpResponseMessage response = client.PutAsync($"api/OficinaAPI/{id}", contentData).Result;
+                        ViewBag.Message = response.Content.ReadAsStringAsync().Result;
+                    }
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    return NotFound();
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(oficina);
+        }
 
         // GET: Oficina/Delete/5
-        //public async Task<IActionResult> Delete(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-        //    var oficina = await _context.Oficinas
-        //        .FirstOrDefaultAsync(m => m.Id == id);
-        //    if (oficina == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(oficina);
-        //}
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("https://localhost:44302/");
+                var mediaType = new MediaTypeWithQualityHeaderValue("application/json");
+                client.DefaultRequestHeaders.Accept.Add(mediaType);
+                var response = client.GetAsync($"api/OficinaAPI/{id}").Result;
+                Oficina oficina = new Oficina();
+                if (response.IsSuccessStatusCode)
+                {
+                    string json = await response.Content.ReadAsStringAsync();
+                    oficina = JsonConvert.DeserializeObject<Oficina>(json);
+                }
+                if (oficina == null)
+                {
+                    return NotFound();
+                }
+                return View(oficina);
+            }
+        }
 
         // POST: Oficina/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> DeleteConfirmed(int id)
-        //{
-        //    var oficina = await _context.Oficinas.FindAsync(id);
-        //    _context.Oficinas.Remove(oficina);
-        //    await _context.SaveChangesAsync();
-        //    return RedirectToAction(nameof(Index));
-        //}
-
-        //private bool OficinaExists(int id)
-        //{
-        //    return _context.Oficinas.Any(e => e.Id == id);
-        //}
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            using (var client = new HttpClient())
+            {
+                Oficina oficina = new Oficina();
+                client.BaseAddress = new Uri("https://localhost:44302/");
+                string stringData = JsonConvert.SerializeObject(oficina);
+                var contentData = new StringContent(stringData, System.Text.Encoding.UTF8, "application/json");
+                HttpResponseMessage response = client.DeleteAsync($"api/OficinaAPI/{id}").Result;
+                ViewBag.Message = response.Content.ReadAsStringAsync().Result;
+            }
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

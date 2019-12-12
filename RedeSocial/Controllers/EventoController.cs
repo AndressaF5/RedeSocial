@@ -6,6 +6,7 @@ using Dominio;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Newtonsoft.Json;
+using Microsoft.EntityFrameworkCore;
 
 namespace RedeSocial.Controllers
 {
@@ -32,22 +33,33 @@ namespace RedeSocial.Controllers
         }
 
         // GET: Evento/Details/5
-        //public async Task<IActionResult> Details(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-        //    var evento = await _context.Eventos
-        //        .FirstOrDefaultAsync(m => m.Id == id);
-        //    if (evento == null)
-        //    {
-        //        return NotFound();
-        //    }
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri($"https://localhost:44302/{id}");
+                var mediaType = new MediaTypeWithQualityHeaderValue("application/json");
+                client.DefaultRequestHeaders.Accept.Add(mediaType);
+                var response = client.GetAsync($"api/EventoAPI/{id}").Result;
+                Evento evento = new Evento();
+                if (response.IsSuccessStatusCode)
+                {
+                    string json = await response.Content.ReadAsStringAsync();
+                    evento = JsonConvert.DeserializeObject<Evento>(json);
+                }
+                if (evento == null)
+                {
+                    return NotFound();
+                }
 
-        //    return View(evento);
-        //}
+                return View(evento);
+            }
+        }
 
         // GET: Evento/Create
         public IActionResult Create()
@@ -73,93 +85,116 @@ namespace RedeSocial.Controllers
                     ViewBag.Message = response.Content.ReadAsStringAsync().Result;
                     return RedirectToAction(nameof(Index));
                 }
+
             }
             return View(evento);
         }
 
         // GET: Evento/Edit/5
-        //public async Task<IActionResult> Edit(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-        //    var evento = await _context.Eventos.FindAsync(id);
-        //    if (evento == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return View(evento);
-        //}
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("https://localhost:44302/");
+                var mediaType = new MediaTypeWithQualityHeaderValue("application/json");
+                client.DefaultRequestHeaders.Accept.Add(mediaType);
+                var response = client.GetAsync($"api/EventoAPI/{id}").Result;
+                Evento evento = new Evento();
+                if (response.IsSuccessStatusCode)
+                {
+                    string json = await response.Content.ReadAsStringAsync();
+                    evento = JsonConvert.DeserializeObject<Evento>(json);
+                }
+                if (evento == null)
+                {
+                    return NotFound();
+                }
+                return View(evento);
+            }
+        }
 
         // POST: Evento/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Edit(int id, [Bind("Id,NomeAtividade,Data,Hora,Categoria,Descricao")] Evento evento)
-        //{
-        //    if (id != evento.Id)
-        //    {
-        //        return NotFound();
-        //    }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,NomeAtividade,Data,Hora,Categoria,Descricao")] Evento evento)
+        {
+            if (id != evento.Id)
+            {
+                return NotFound();
+            }
 
-        //    if (ModelState.IsValid)
-        //    {
-        //        try
-        //        {
-        //            _context.Update(evento);
-        //            await _context.SaveChangesAsync();
-        //        }
-        //        catch (DbUpdateConcurrencyException)
-        //        {
-        //            if (!EventoExists(evento.Id))
-        //            {
-        //                return NotFound();
-        //            }
-        //            else
-        //            {
-        //                throw;
-        //            }
-        //        }
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    return View(evento);
-        //}
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    using (var client = new HttpClient())
+                    {
+                        client.BaseAddress = new Uri("https://localhost:44302/");
+                        string stringData = JsonConvert.SerializeObject(evento);
+                        var contentData = new StringContent(stringData, System.Text.Encoding.UTF8, "application/json");
+                        HttpResponseMessage response = client.PutAsync($"api/EventoAPI/{id}", contentData).Result;
+                        ViewBag.Message = response.Content.ReadAsStringAsync().Result;
+                    }
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    return NotFound();
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(evento);
+        }
 
         // GET: Evento/Delete/5
-        //public async Task<IActionResult> Delete(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-        //    var evento = await _context.Eventos
-        //        .FirstOrDefaultAsync(m => m.Id == id);
-        //    if (evento == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(evento);
-        //}
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("https://localhost:44302/");
+                var mediaType = new MediaTypeWithQualityHeaderValue("application/json");
+                client.DefaultRequestHeaders.Accept.Add(mediaType);
+                var response = client.GetAsync($"api/EventoAPI/{id}").Result;
+                Evento evento = new Evento();
+                if (response.IsSuccessStatusCode)
+                {
+                    string json = await response.Content.ReadAsStringAsync();
+                    evento = JsonConvert.DeserializeObject<Evento>(json);
+                }
+                if (evento == null)
+                {
+                    return NotFound();
+                }
+                return View(evento);
+            }
+        }
 
         // POST: Evento/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> DeleteConfirmed(int id)
-        //{
-        //    var evento = await _context.Eventos.FindAsync(id);
-        //    _context.Eventos.Remove(evento);
-        //    await _context.SaveChangesAsync();
-        //    return RedirectToAction(nameof(Index));
-        //}
-
-        //private bool EventoExists(int id)
-        //{
-        //    return _context.Eventos.Any(e => e.Id == id);
-        //}
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            using (var client = new HttpClient())
+            {
+                Evento evento = new Evento();
+                client.BaseAddress = new Uri("https://localhost:44302/");
+                string stringData = JsonConvert.SerializeObject(evento);
+                var contentData = new StringContent(stringData, System.Text.Encoding.UTF8, "application/json");
+                HttpResponseMessage response = client.DeleteAsync($"api/EventoAPI/{id}").Result;
+                ViewBag.Message = response.Content.ReadAsStringAsync().Result;
+            }
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

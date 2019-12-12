@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Banco;
 using Dominio;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -20,8 +18,8 @@ namespace RedeSocial.Controllers
             using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri("https://localhost:44302/");
-                var mediaTyper = new MediaTypeWithQualityHeaderValue("application/json");
-                client.DefaultRequestHeaders.Accept.Add(mediaTyper);
+                var mediaType = new MediaTypeWithQualityHeaderValue("application/json");
+                client.DefaultRequestHeaders.Accept.Add(mediaType);
                 var response = client.GetAsync("api/PessoaJuridicaAPI").Result;
                 List<PessoaJuridica> pessoasJuridicas = new List<PessoaJuridica>();
                 if (response.IsSuccessStatusCode)
@@ -35,22 +33,33 @@ namespace RedeSocial.Controllers
         }
 
         // GET: PessoaJuridica/Details/5
-        //public async Task<IActionResult> Details(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-        //    var pessoaJuridica = await _context.PessoasJuridicas
-        //        .FirstOrDefaultAsync(m => m.Id == id);
-        //    if (pessoaJuridica == null)
-        //    {
-        //        return NotFound();
-        //    }
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri($"https://localhost:44302/{id}");
+                var mediaType = new MediaTypeWithQualityHeaderValue("application/json");
+                client.DefaultRequestHeaders.Accept.Add(mediaType);
+                var response = client.GetAsync($"api/PessoaJuridicaAPI/{id}").Result;
+                PessoaJuridica pessoaJuridica = new PessoaJuridica();
+                if (response.IsSuccessStatusCode)
+                {
+                    string json = await response.Content.ReadAsStringAsync();
+                    pessoaJuridica = JsonConvert.DeserializeObject<PessoaJuridica>(json);
+                }
+                if (pessoaJuridica == null)
+                {
+                    return NotFound();
+                }
 
-        //    return View(pessoaJuridica);
-        //}
+                return View(pessoaJuridica);
+            }
+        }
 
         // GET: PessoaJuridica/Create
         public IActionResult Create()
@@ -76,93 +85,116 @@ namespace RedeSocial.Controllers
                     ViewBag.Message = response.Content.ReadAsStringAsync().Result;
                     return RedirectToAction(nameof(Index));
                 }
+
             }
             return View(pessoaJuridica);
         }
 
         // GET: PessoaJuridica/Edit/5
-        //public async Task<IActionResult> Edit(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-        //    var pessoaJuridica = await _context.PessoasJuridicas.FindAsync(id);
-        //    if (pessoaJuridica == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return View(pessoaJuridica);
-        //}
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("https://localhost:44302/");
+                var mediaType = new MediaTypeWithQualityHeaderValue("application/json");
+                client.DefaultRequestHeaders.Accept.Add(mediaType);
+                var response = client.GetAsync($"api/PessoaJuridicaAPI/{id}").Result;
+                PessoaJuridica pessoaJuridica = new PessoaJuridica();
+                if (response.IsSuccessStatusCode)
+                {
+                    string json = await response.Content.ReadAsStringAsync();
+                    pessoaJuridica = JsonConvert.DeserializeObject<PessoaJuridica>(json);
+                }
+                if (pessoaJuridica == null)
+                {
+                    return NotFound();
+                }
+                return View(pessoaJuridica);
+            }
+        }
 
         // POST: PessoaJuridica/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Edit(int id, [Bind("Id,NomeEmpresa,CNPJ,RazaoSocial")] PessoaJuridica pessoaJuridica)
-        //{
-        //    if (id != pessoaJuridica.Id)
-        //    {
-        //        return NotFound();
-        //    }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,NomeEmpresa,CNPJ,RazaoSocial")] PessoaJuridica pessoaJuridica)
+        {
+            if (id != pessoaJuridica.Id)
+            {
+                return NotFound();
+            }
 
-        //    if (ModelState.IsValid)
-        //    {
-        //        try
-        //        {
-        //            _context.Update(pessoaJuridica);
-        //            await _context.SaveChangesAsync();
-        //        }
-        //        catch (DbUpdateConcurrencyException)
-        //        {
-        //            if (!PessoaJuridicaExists(pessoaJuridica.Id))
-        //            {
-        //                return NotFound();
-        //            }
-        //            else
-        //            {
-        //                throw;
-        //            }
-        //        }
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    return View(pessoaJuridica);
-        //}
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    using (var client = new HttpClient())
+                    {
+                        client.BaseAddress = new Uri("https://localhost:44302/");
+                        string stringData = JsonConvert.SerializeObject(pessoaJuridica);
+                        var contentData = new StringContent(stringData, System.Text.Encoding.UTF8, "application/json");
+                        HttpResponseMessage response = client.PutAsync($"api/PessoaJuridicaAPI/{id}", contentData).Result;
+                        ViewBag.Message = response.Content.ReadAsStringAsync().Result;
+                    }
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    return NotFound();
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(pessoaJuridica);
+        }
 
         // GET: PessoaJuridica/Delete/5
-        //public async Task<IActionResult> Delete(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return NotFound();
-        //    }
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-        //    var pessoaJuridica = await _context.PessoasJuridicas
-        //        .FirstOrDefaultAsync(m => m.Id == id);
-        //    if (pessoaJuridica == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(pessoaJuridica);
-        //}
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("https://localhost:44302/");
+                var mediaType = new MediaTypeWithQualityHeaderValue("application/json");
+                client.DefaultRequestHeaders.Accept.Add(mediaType);
+                var response = client.GetAsync($"api/PessoaJuridicaAPI/{id}").Result;
+                PessoaJuridica pessoaJuridica = new PessoaJuridica();
+                if (response.IsSuccessStatusCode)
+                {
+                    string json = await response.Content.ReadAsStringAsync();
+                    pessoaJuridica = JsonConvert.DeserializeObject<PessoaJuridica>(json);
+                }
+                if (pessoaJuridica == null)
+                {
+                    return NotFound();
+                }
+                return View(pessoaJuridica);
+            }
+        }
 
         // POST: PessoaJuridica/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> DeleteConfirmed(int id)
-        //{
-        //    var pessoaJuridica = await _context.PessoasJuridicas.FindAsync(id);
-        //    _context.PessoasJuridicas.Remove(pessoaJuridica);
-        //    await _context.SaveChangesAsync();
-        //    return RedirectToAction(nameof(Index));
-        //}
-
-        //private bool PessoaJuridicaExists(int id)
-        //{
-        //    return _context.PessoasJuridicas.Any(e => e.Id == id);
-        //}
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            using (var client = new HttpClient())
+            {
+                PessoaJuridica pessoaJuridica = new PessoaJuridica();
+                client.BaseAddress = new Uri("https://localhost:44302/");
+                string stringData = JsonConvert.SerializeObject(pessoaJuridica);
+                var contentData = new StringContent(stringData, System.Text.Encoding.UTF8, "application/json");
+                HttpResponseMessage response = client.DeleteAsync($"api/PessoaJuridicaAPI/{id}").Result;
+                ViewBag.Message = response.Content.ReadAsStringAsync().Result;
+            }
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
