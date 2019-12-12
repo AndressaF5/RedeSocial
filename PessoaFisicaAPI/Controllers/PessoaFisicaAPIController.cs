@@ -69,7 +69,7 @@ namespace PessoaFisicaAPI.Controllers
             // Details
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                string sql = "SELEC Id, Nome, Sobrenome, NomeSocial, DataNascimento, CPF, Genero FROM PessoasFisicas WHERE Id=@Id";
+                string sql = "SELECT Id, Nome, Sobrenome, NomeSocial, DataNascimento, CPF, Genero FROM PessoasFisicas WHERE Id=@Id";
                 SqlCommand cmd = new SqlCommand(sql, connection);
                 cmd.Parameters.AddWithValue("@Id", id);
                 PessoaFisica pessoaFisica = null;
