@@ -13,6 +13,9 @@ namespace Dominio
         public string Categoria { get; set; }
         public string Descricao { get; set; }
         public Endereco Endereco { get; set; }
+        public Oficina Oficina { get; set; }
+        public Arrecadacao Arrecadacao { get; set; }
+        public Doacao Doacao { get; set; }
         public ICollection<UsuarioEvento> UsuarioEvento { get; set; }
 	    
 	 //   public void divulgar() {

@@ -14,7 +14,10 @@ namespace Dominio
         public DateTime DataNascimento { get; set; }
         public string CPF { get; set; }
         public string Genero { get; set; }
+        public Contato Contato { get; set; }
         public IdentityUser IdentityUser { get; set; }
+        public ICollection<Amizade> AmizadesSolicitadas { get; set; }
+        public ICollection<Amizade> AmizadesRecebidas { get; set; }
 
         //   public void divulgar() {
         //     base.divulgar();

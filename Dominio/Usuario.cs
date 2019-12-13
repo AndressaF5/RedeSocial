@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
-using System.Text;
+using System.ComponentModel.DataAnnotations;
 
 namespace Dominio
 {
@@ -9,6 +9,9 @@ namespace Dominio
         public int Id { get; set; }
         public PessoaFisica PessoaFisica { get; set; }
         public PessoaJuridica PessoaJuridica { get; set; }
+        public IdentityUser IdentityUser { get; set; }
+        public ICollection<Amizade> AmizadesSolicitadas { get; set; }
+        public ICollection<Amizade> AmizadesRecebidas { get; set; }
         public Contato Contato { get; set; }
         public ICollection<Evento> Evento { get; set; }
         public ICollection<UsuarioEvento> UsuarioEvento { get; set; }

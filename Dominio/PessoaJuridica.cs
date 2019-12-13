@@ -12,20 +12,23 @@ namespace Dominio
         public string CNPJ { get; set; }
         public string RazaoSocial { get; set; }
         public Endereco Endereco { get; set; }
+        public Contato Contato { get; set; }
         public IdentityUser IdentityUser { get; set; }
+        public ICollection<Amizade> AmizadesSolicitadas { get; set; }
+        public ICollection<Amizade> AmizadesRecebidas { get; set; }
 
-        
-	    //public void divulgar() {
-		   // base.divulgar();
-		   // Console.WriteLine(":: Dados da empresa ::\n"
-				 //   + "Nome da empresa: %s \n"
-				 //   + "Razao Social: %s \n"
-				 //   + "CNPJ: %s \n",
-				 //   NomeEmpresa,
-				 //   RazaoSocial,
-				 //   CNPJ
-				 //   );
-	    //}
-	
+
+        //public void divulgar() {
+        // base.divulgar();
+        // Console.WriteLine(":: Dados da empresa ::\n"
+        //   + "Nome da empresa: %s \n"
+        //   + "Razao Social: %s \n"
+        //   + "CNPJ: %s \n",
+        //   NomeEmpresa,
+        //   RazaoSocial,
+        //   CNPJ
+        //   );
+        //}
+
     }
 }

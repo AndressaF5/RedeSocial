@@ -3,11 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Dominio;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Banco
 {
-    public class RedeSocialDbContext : DbContext
-    {        
+    public class RedeSocialDbContext : IdentityDbContext
+    {
         public DbSet<Arrecadacao> Arrecadacoes { get; set; }
         public DbSet<Contato> Contatos { get; set; }
         public DbSet<Doacao> Doacoes { get; set; }
@@ -16,7 +17,6 @@ namespace Banco
         public DbSet<Oficina> Oficinas { get; set; }
         public DbSet<PessoaFisica> PessoasFisicas { get; set; }
         public DbSet<PessoaJuridica> PessoasJuridicas { get; set; }
-
         public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<UsuarioEvento> UsuariosEventos { get; set; }
 
@@ -40,7 +40,21 @@ namespace Banco
                 .HasOne(ue => ue.Evento)
                 .WithMany(e => e.UsuarioEvento)
                 .HasForeignKey(ue => ue.EventoId);
-        }
 
+            builder.Entity<Amizade>()
+                .HasKey(a => new { a.UsuarioIdA, a.UsuarioIdB });
+
+            builder.Entity<Amizade>()
+                .HasOne(a => a.UsuarioA)
+                .WithMany(u => u.AmizadesSolicitadas)
+                .HasForeignKey(a => a.UsuarioIdA)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Amizade>()
+                .HasOne(a => a.UsuarioB)
+                .WithMany(u => u.AmizadesRecebidas)
+                .HasForeignKey(a => a.UsuarioIdB)
+                .OnDelete(DeleteBehavior.Restrict);
+        }
     }
 }
