@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -13,22 +14,23 @@ namespace Dominio
         public DateTime DataNascimento { get; set; }
         public string CPF { get; set; }
         public string Genero { get; set; }
+        public IdentityUser IdentityUser { get; set; }
 
-    //   public void divulgar() {
-	   //     base.divulgar();
-		  //  Console.WriteLine(":: Dados Pessoais ::\n"
-				//    + "Nome: %s \n"
-				//    + "Nome Social: %s \n"
-				//    + "Data de Nascimento (DD/MM/AA): %s \n"
-				//    + "CPF: %s \n"
-				//    + "Genero: %s\n",
-				//     Nome,    
-				//     NomeSocial,   
-				//     DataNascimento, 
-				//     CPF,            
-				//     Genero               
-				//    );
-	   //}
-	
+        //   public void divulgar() {
+        //     base.divulgar();
+        //  Console.WriteLine(":: Dados Pessoais ::\n"
+        //    + "Nome: %s \n"
+        //    + "Nome Social: %s \n"
+        //    + "Data de Nascimento (DD/MM/AA): %s \n"
+        //    + "CPF: %s \n"
+        //    + "Genero: %s\n",
+        //     Nome,    
+        //     NomeSocial,   
+        //     DataNascimento, 
+        //     CPF,            
+        //     Genero               
+        //    );
+        //}
+
     }
 }

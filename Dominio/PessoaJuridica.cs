@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -11,6 +12,7 @@ namespace Dominio
         public string CNPJ { get; set; }
         public string RazaoSocial { get; set; }
         public Endereco Endereco { get; set; }
+        public IdentityUser IdentityUser { get; set; }
 
         
 	    //public void divulgar() {

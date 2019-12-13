@@ -29,6 +29,13 @@ namespace RedeSocial.Controllers
             return View();
         }
 
+        public IActionResult Publicacao()
+        {
+            ViewData["Message"] = "Publicações";
+
+            return View();
+        }
+
         public IActionResult Privacy()
         {
             return View();
