@@ -1,13 +1,13 @@
-﻿@model Dominio.PessoaFisica
+﻿@model Dominio.Usuario
 
 @{
     ViewData["Title"] = "Details";
 }
 
-<h2>Details</h2>
+<h2>Detalhes</h2>
 
 <div>
-    <h4>PessoaFisica</h4>
+    <h4>@Model.Nome @Model.Sobrenome</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -50,5 +50,5 @@
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Voltar para a lista</a>
 </div>

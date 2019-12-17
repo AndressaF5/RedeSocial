@@ -9,6 +9,12 @@
     <Compile Remove="Migrations\20191129230526_Quarto.Designer.cs" />
     <Compile Remove="Migrations\20191129234545_Quarto.cs" />
     <Compile Remove="Migrations\20191129234545_Quarto.Designer.cs" />
+    <Compile Remove="Migrations\20191213230331_Quinto.cs" />
+    <Compile Remove="Migrations\20191213230331_Quinto.Designer.cs" />
+    <Compile Remove="Migrations\20191213230638_Quinto.cs" />
+    <Compile Remove="Migrations\20191213230638_Quinto.Designer.cs" />
+    <Compile Remove="Migrations\20191213231518_Quinto.cs" />
+    <Compile Remove="Migrations\20191213231518_Quinto.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

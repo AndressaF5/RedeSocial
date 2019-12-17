@@ -1,31 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Dominio;
 using System.Data.SqlClient;
 using System.Data;
 
-namespace PessoaFisicaAPI.Controllers
+namespace UsuarioAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PessoaFisicaAPIController : ControllerBase
+    public class UsuarioAPIController : ControllerBase
     {
         string connectionString = "Server=tcp:trabalhos.database.windows.net,1433;Initial Catalog=infnettrabalhos;Persist Security Info=False;User ID=andressafsilva;Password=Porcoaranh@007;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
 
         // GET api/values
         [HttpGet]
-        public ActionResult<IEnumerable<PessoaFisica>> Get()
+        public ActionResult<IEnumerable<Usuario>> Get()
         {
             // Read
 
-            var pessoaFisicas = new List<PessoaFisica>();
+            var usuarios = new List<Usuario>();
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                var cmdText = "SELECT * FROM PessoasFisicas";
+                var cmdText = "SELECT * FROM Usuarios";
                 SqlCommand select = new SqlCommand(cmdText, connection);
                 try
                 {
@@ -34,17 +32,16 @@ namespace PessoaFisicaAPI.Controllers
                     {
                         while (reader.Read())
                         {
-                            var pessoaFisica = new PessoaFisica();
-                            pessoaFisica.Id = (int)reader["Id"];
-                            pessoaFisica.Nome = reader["Nome"].ToString();
-                            pessoaFisica.Sobrenome = reader["Sobrenome"].ToString();
-                            pessoaFisica.NomeSocial = reader["NomeSocial"].ToString();
-                            pessoaFisica.DataNascimento = (DateTime)reader["DataNascimento"];
-                            pessoaFisica.CPF = reader["CPF"].ToString();
-                            pessoaFisica.Genero = reader["Genero"].ToString();
+                            var usuario = new Usuario();
+                            usuario.Id = (int)reader["Id"];
+                            usuario.Nome = reader["Nome"].ToString();
+                            usuario.Sobrenome = reader["Sobrenome"].ToString();
+                            usuario.NomeSocial = reader["NomeSocial"].ToString();
+                            usuario.DataNascimento = (DateTime)reader["DataNascimento"];
+                            usuario.CPF = reader["CPF"].ToString();
+                            usuario.Genero = reader["Genero"].ToString();
 
-
-                            pessoaFisicas.Add(pessoaFisica);
+                            usuarios.Add(usuario);
 
                         }
                     }
@@ -59,20 +56,20 @@ namespace PessoaFisicaAPI.Controllers
                 }
             }
 
-            return pessoaFisicas;
+            return usuarios;
         }
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public ActionResult<PessoaFisica> Get(int id)
+        public ActionResult<Usuario> Get(int id)
         {
             // Details
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                string sql = "SELECT Id, Nome, Sobrenome, NomeSocial, DataNascimento, CPF, Genero FROM PessoasFisicas WHERE Id=@Id";
+                string sql = "SELECT Id, Nome, Sobrenome, NomeSocial, DataNascimento, CPF, Genero FROM Usuarios WHERE Id=@Id";
                 SqlCommand cmd = new SqlCommand(sql, connection);
                 cmd.Parameters.AddWithValue("@Id", id);
-                PessoaFisica pessoaFisica = null;
+                Usuario usuario = null;
                 try
                 {
                     connection.Open();
@@ -82,14 +79,14 @@ namespace PessoaFisicaAPI.Controllers
                         {
                             if (reader.Read())
                             {
-                                pessoaFisica = new PessoaFisica();
-                                pessoaFisica.Id = (int)reader["Id"];
-                                pessoaFisica.Nome = reader["Nome"].ToString();
-                                pessoaFisica.Sobrenome = reader["Sobrenome"].ToString();
-                                pessoaFisica.NomeSocial = reader["NomeSocial"].ToString();
-                                pessoaFisica.DataNascimento = (DateTime)reader["DataNascimento"];
-                                pessoaFisica.CPF = reader["CPF"].ToString();
-                                pessoaFisica.Genero = reader["Genero"].ToString();
+                                usuario = new Usuario();
+                                usuario.Id = (int)reader["Id"];
+                                usuario.Nome = reader["Nome"].ToString();
+                                usuario.Sobrenome = reader["Sobrenome"].ToString();
+                                usuario.NomeSocial = reader["NomeSocial"].ToString();
+                                usuario.DataNascimento = (DateTime)reader["DataNascimento"];
+                                usuario.CPF = reader["CPF"].ToString();
+                                usuario.Genero = reader["Genero"].ToString();
                             }
                         }
                     }
@@ -102,26 +99,26 @@ namespace PessoaFisicaAPI.Controllers
                 {
                     connection.Close();
                 }
-                return pessoaFisica;
+                return usuario;
             }
         }
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody] PessoaFisica pessoaFisica)
+        public void Post([FromBody] Usuario usuario)
         {
             // Create
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                string cmdText = "INSERT INTO PessoasFisicas (Nome, Sobrenome, NomeSocial, DataNascimento, CPF, Genero) Values(@Nome, @Sobrenome, @NomeSocial, @DataNascimento, @CPF, @Genero)";
+                string cmdText = "INSERT INTO Usuarios (Nome, Sobrenome, NomeSocial, DataNascimento, CPF, Genero) Values(@Nome, @Sobrenome, @NomeSocial, @DataNascimento, @CPF, @Genero)";
                 SqlCommand cmd = new SqlCommand(cmdText, connection);
                 cmd.CommandType = CommandType.Text;
-                cmd.Parameters.AddWithValue("@Nome", pessoaFisica.Nome);
-                cmd.Parameters.AddWithValue("@Sobrenome", pessoaFisica.Sobrenome);
-                cmd.Parameters.AddWithValue("@NomeSocial", pessoaFisica.NomeSocial);
-                cmd.Parameters.AddWithValue("@DataNascimento", pessoaFisica.DataNascimento);
-                cmd.Parameters.AddWithValue("@CPF", pessoaFisica.CPF);
-                cmd.Parameters.AddWithValue("@Genero", pessoaFisica.Genero);
+                cmd.Parameters.AddWithValue("@Nome", usuario.Nome);
+                cmd.Parameters.AddWithValue("@Sobrenome", usuario.Sobrenome);
+                cmd.Parameters.AddWithValue("@NomeSocial", usuario.NomeSocial);
+                cmd.Parameters.AddWithValue("@DataNascimento", usuario.DataNascimento);
+                cmd.Parameters.AddWithValue("@CPF", usuario.CPF);
+                cmd.Parameters.AddWithValue("@Genero", usuario.Genero);
                 try
                 {
                     connection.Open();
@@ -140,20 +137,20 @@ namespace PessoaFisicaAPI.Controllers
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] PessoaFisica pessoaFisica)
+        public void Put(int id, [FromBody] Usuario usuario)
         {
             // Update
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                string cmdText = "UPDATE PessoasFisicas SET Nome=@Nome, Sobrenome=@Sobrenome, NomeSocial=@NomeSocial, DataNascimento=@DataNascimento, Genero=@Genero WHERE Id=@Id";
+                string cmdText = "UPDATE Usuarios SET Nome=@Nome, Sobrenome=@Sobrenome, NomeSocial=@NomeSocial, DataNascimento=@DataNascimento, Genero=@Genero WHERE Id=@Id";
                 SqlCommand cmd = new SqlCommand(cmdText, connection);
-                cmd.Parameters.AddWithValue("Id", pessoaFisica.Id);
-                cmd.Parameters.AddWithValue("Nome", pessoaFisica.Nome);
-                cmd.Parameters.AddWithValue("Sobrenome", pessoaFisica.Sobrenome);
-                cmd.Parameters.AddWithValue("NomeSocial", pessoaFisica.NomeSocial);
-                cmd.Parameters.AddWithValue("DataNascimento", pessoaFisica.DataNascimento);
-                cmd.Parameters.AddWithValue("CPF", pessoaFisica.CPF);
-                cmd.Parameters.AddWithValue("Genero", pessoaFisica.Genero);
+                cmd.Parameters.AddWithValue("Id", usuario.Id);
+                cmd.Parameters.AddWithValue("Nome", usuario.Nome);
+                cmd.Parameters.AddWithValue("Sobrenome", usuario.Sobrenome);
+                cmd.Parameters.AddWithValue("NomeSocial", usuario.NomeSocial);
+                cmd.Parameters.AddWithValue("DataNascimento", usuario.DataNascimento);
+                cmd.Parameters.AddWithValue("CPF", usuario.CPF);
+                cmd.Parameters.AddWithValue("Genero", usuario.Genero);
 
                 try
                 {
@@ -173,7 +170,7 @@ namespace PessoaFisicaAPI.Controllers
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                string cmdText = "DELETE PessoasFisicas WHERE Id=@Id";
+                string cmdText = "DELETE Usuarios WHERE Id=@Id";
                 SqlCommand cmd = new SqlCommand(cmdText, connection);
                 cmd.Parameters.AddWithValue("Id", id);
                 try

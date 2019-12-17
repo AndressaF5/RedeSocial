@@ -10,9 +10,9 @@ using Newtonsoft.Json;
 
 namespace RedeSocial.Controllers
 {
-    public class PessoaJuridicaController : Controller
+    public class UsuarioController : Controller
     {
-        // GET: PessoaJuridica
+        // GET: Usuario
         public async Task<IActionResult> Index()
         {
             using (var client = new HttpClient())
@@ -20,19 +20,19 @@ namespace RedeSocial.Controllers
                 client.BaseAddress = new Uri("https://localhost:44302/");
                 var mediaType = new MediaTypeWithQualityHeaderValue("application/json");
                 client.DefaultRequestHeaders.Accept.Add(mediaType);
-                var response = client.GetAsync("api/PessoaJuridicaAPI").Result;
-                List<PessoaJuridica> pessoasJuridicas = new List<PessoaJuridica>();
+                var response = client.GetAsync("api/UsuarioAPI").Result;
+                List<Usuario> usuarios = new List<Usuario>();
                 if (response.IsSuccessStatusCode)
                 {
                     string json = await response.Content.ReadAsStringAsync();
-                    pessoasJuridicas = JsonConvert.DeserializeObject<List<PessoaJuridica>>(json);
+                    usuarios = JsonConvert.DeserializeObject<List<Usuario>>(json);
                 }
 
-                return View(pessoasJuridicas);
+                return View(usuarios);
             }
         }
 
-        // GET: PessoaJuridica/Details/5
+        // GET: Usuario/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -45,52 +45,52 @@ namespace RedeSocial.Controllers
                 client.BaseAddress = new Uri($"https://localhost:44302/{id}");
                 var mediaType = new MediaTypeWithQualityHeaderValue("application/json");
                 client.DefaultRequestHeaders.Accept.Add(mediaType);
-                var response = client.GetAsync($"api/PessoaJuridicaAPI/{id}").Result;
-                PessoaJuridica pessoaJuridica = new PessoaJuridica();
+                var response = client.GetAsync($"api/UsuarioAPI/{id}").Result;
+                Usuario usuario = new Usuario();
                 if (response.IsSuccessStatusCode)
                 {
                     string json = await response.Content.ReadAsStringAsync();
-                    pessoaJuridica = JsonConvert.DeserializeObject<PessoaJuridica>(json);
+                    usuario = JsonConvert.DeserializeObject<Usuario>(json);
                 }
-                if (pessoaJuridica == null)
+                if (usuario == null)
                 {
                     return NotFound();
                 }
 
-                return View(pessoaJuridica);
+                return View(usuario);
             }
         }
 
-        // GET: PessoaJuridica/Create
+        // GET: Usuario/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: PessoaJuridica/Create
+        // POST: Usuario/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,NomeEmpresa,CNPJ,RazaoSocial")] PessoaJuridica pessoaJuridica)
+        public async Task<IActionResult> Create([Bind("Id,Nome,Sobrenome,NomeSocial,DataNascimento,CPF,Genero")] Usuario usuario)
         {
             if (ModelState.IsValid)
             {
                 using (var client = new HttpClient())
                 {
                     client.BaseAddress = new Uri("https://localhost:44302/");
-                    string stringData = JsonConvert.SerializeObject(pessoaJuridica);
+                    string stringData = JsonConvert.SerializeObject(usuario);
                     var contentData = new StringContent(stringData, System.Text.Encoding.UTF8, "application/json");
-                    HttpResponseMessage response = client.PostAsync("api/PessoaJuridicaAPI", contentData).Result;
+                    HttpResponseMessage response = client.PostAsync("api/UsuarioAPI", contentData).Result;
                     ViewBag.Message = response.Content.ReadAsStringAsync().Result;
                     return RedirectToAction(nameof(Index));
                 }
 
             }
-            return View(pessoaJuridica);
+            return View(usuario);
         }
 
-        // GET: PessoaJuridica/Edit/5
+        // GET: Usuario/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -103,29 +103,29 @@ namespace RedeSocial.Controllers
                 client.BaseAddress = new Uri("https://localhost:44302/");
                 var mediaType = new MediaTypeWithQualityHeaderValue("application/json");
                 client.DefaultRequestHeaders.Accept.Add(mediaType);
-                var response = client.GetAsync($"api/PessoaJuridicaAPI/{id}").Result;
-                PessoaJuridica pessoaJuridica = new PessoaJuridica();
+                var response = client.GetAsync($"api/UsuarioAPI/{id}").Result;
+                Usuario usuario = new Usuario();
                 if (response.IsSuccessStatusCode)
                 {
                     string json = await response.Content.ReadAsStringAsync();
-                    pessoaJuridica = JsonConvert.DeserializeObject<PessoaJuridica>(json);
+                    usuario = JsonConvert.DeserializeObject<Usuario>(json);
                 }
-                if (pessoaJuridica == null)
+                if (usuario == null)
                 {
                     return NotFound();
                 }
-                return View(pessoaJuridica);
+                return View(usuario);
             }
         }
 
-        // POST: PessoaJuridica/Edit/5
+        // POST: Usuario/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,NomeEmpresa,CNPJ,RazaoSocial")] PessoaJuridica pessoaJuridica)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,Sobrenome,NomeSocial,DataNascimento,CPF,Genero")] Usuario usuario)
         {
-            if (id != pessoaJuridica.Id)
+            if (id != usuario.Id)
             {
                 return NotFound();
             }
@@ -137,9 +137,9 @@ namespace RedeSocial.Controllers
                     using (var client = new HttpClient())
                     {
                         client.BaseAddress = new Uri("https://localhost:44302/");
-                        string stringData = JsonConvert.SerializeObject(pessoaJuridica);
+                        string stringData = JsonConvert.SerializeObject(usuario);
                         var contentData = new StringContent(stringData, System.Text.Encoding.UTF8, "application/json");
-                        HttpResponseMessage response = client.PutAsync($"api/PessoaJuridicaAPI/{id}", contentData).Result;
+                        HttpResponseMessage response = client.PutAsync($"api/UsuarioAPI/{id}", contentData).Result;
                         ViewBag.Message = response.Content.ReadAsStringAsync().Result;
                     }
                 }
@@ -149,10 +149,10 @@ namespace RedeSocial.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(pessoaJuridica);
+            return View(usuario);
         }
 
-        // GET: PessoaJuridica/Delete/5
+        // GET: Usuario/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -165,33 +165,33 @@ namespace RedeSocial.Controllers
                 client.BaseAddress = new Uri("https://localhost:44302/");
                 var mediaType = new MediaTypeWithQualityHeaderValue("application/json");
                 client.DefaultRequestHeaders.Accept.Add(mediaType);
-                var response = client.GetAsync($"api/PessoaJuridicaAPI/{id}").Result;
-                PessoaJuridica pessoaJuridica = new PessoaJuridica();
+                var response = client.GetAsync($"api/UsuarioAPI/{id}").Result;
+                Usuario usuario = new Usuario();
                 if (response.IsSuccessStatusCode)
                 {
                     string json = await response.Content.ReadAsStringAsync();
-                    pessoaJuridica = JsonConvert.DeserializeObject<PessoaJuridica>(json);
+                    usuario = JsonConvert.DeserializeObject<Usuario>(json);
                 }
-                if (pessoaJuridica == null)
+                if (usuario == null)
                 {
                     return NotFound();
                 }
-                return View(pessoaJuridica);
+                return View(usuario);
             }
         }
 
-        // POST: PessoaJuridica/Delete/5
+        // POST: Usuario/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             using (var client = new HttpClient())
             {
-                PessoaJuridica pessoaJuridica = new PessoaJuridica();
+                Usuario usuario = new Usuario();
                 client.BaseAddress = new Uri("https://localhost:44302/");
-                string stringData = JsonConvert.SerializeObject(pessoaJuridica);
+                string stringData = JsonConvert.SerializeObject(usuario);
                 var contentData = new StringContent(stringData, System.Text.Encoding.UTF8, "application/json");
-                HttpResponseMessage response = client.DeleteAsync($"api/PessoaJuridicaAPI/{id}").Result;
+                HttpResponseMessage response = client.DeleteAsync($"api/UsuarioAPI/{id}").Result;
                 ViewBag.Message = response.Content.ReadAsStringAsync().Result;
             }
             return RedirectToAction(nameof(Index));

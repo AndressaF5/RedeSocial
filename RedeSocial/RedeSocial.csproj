@@ -26,8 +26,7 @@
     <ProjectReference Include="..\EnderecoAPI\EnderecoAPI.csproj" />
     <ProjectReference Include="..\EventoAPI\EventoAPI.csproj" />
     <ProjectReference Include="..\OficinaAPI\OficinaAPI.csproj" />
-    <ProjectReference Include="..\PessoaFisicaAPI\PessoaFisicaAPI.csproj" />
-    <ProjectReference Include="..\PessoaJuridicaAPI\PessoaJuridicaAPI.csproj" />
+    <ProjectReference Include="..\PessoaFisicaAPI\UsuarioAPI.csproj" />
   </ItemGroup>
 
 </Project>

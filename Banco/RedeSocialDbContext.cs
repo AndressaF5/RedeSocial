@@ -1,7 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Dominio;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
@@ -15,8 +12,6 @@ namespace Banco
         public DbSet<Endereco> Enderecos { get; set; }
         public DbSet<Evento> Eventos { get; set; }
         public DbSet<Oficina> Oficinas { get; set; }
-        public DbSet<PessoaFisica> PessoasFisicas { get; set; }
-        public DbSet<PessoaJuridica> PessoasJuridicas { get; set; }
         public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<UsuarioEvento> UsuariosEventos { get; set; }
 
@@ -28,6 +23,8 @@ namespace Banco
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            base.OnModelCreating(builder);
+
             builder.Entity<UsuarioEvento>()
                 .HasKey(ue => new { ue.UsuarioId, ue.EventoId });
 
