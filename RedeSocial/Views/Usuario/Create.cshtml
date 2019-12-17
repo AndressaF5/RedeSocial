@@ -4,7 +4,7 @@
     ViewData["Title"] = "Create";
 }
 
-<h2>Create</h2>
+<h2>Meus dados</h2>
 
 <h4>Usuario</h4>
 <hr />
@@ -38,12 +38,24 @@
                 <span asp-validation-for="CPF" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="radio" name="Genero" value="Masculino" checked> Masculino<br>
-                <input type="radio" name="Genero" value="Feminino"> Feminino<br>
-                <input type="radio" name="Genero" value="Outro"> Outro<br>
+                <label asp-for="Genero" class="control-label"></label>
+                <input asp-for="Genero" class="form-control" />
+                <span asp-validation-for="Genero" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn success" />
+                <label asp-for="Contato.Celular" class="control-label">Celular</label>
+                <input asp-for="Contato.Celular" class="form-control" />
+                <span asp-validation-for="Contato.Celular" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Contato.Telefone" class="control-label">Telefone</label>
+                <input asp-for="Contato.Telefone" class="form-control" />
+                <span asp-validation-for="Contato.Telefone" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <a asp-area="" asp-controller="Usuario" asp-action="Details">
+                    <input type="submit" value="Criar Perfil" class="btn btn-success" />
+                </a>
             </div>
         </form>
     </div>
@@ -53,6 +65,3 @@
     <a asp-action="Index">Voltar para a lista</a>
 </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}

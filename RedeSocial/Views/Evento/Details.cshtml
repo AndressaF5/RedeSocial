@@ -40,9 +40,51 @@
         <dd>
             @Html.DisplayFor(model => model.Descricao)
         </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Oficina.NomeOficina)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Oficina.QtdParticipantes)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Contato.Telefone)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Contato.Telefone)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Endereco.Rua)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Endereco.Rua)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Endereco.Bairro)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Endereco.Bairro)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Endereco.Cidade)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Endereco.Cidade)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Endereco.UF)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Endereco.UF)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Endereco.CEP)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Endereco.CEP)
+        </dd>
     </dl>
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Voltar para a lista</a>
 </div>

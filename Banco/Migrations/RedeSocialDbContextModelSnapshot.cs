@@ -29,7 +29,7 @@ namespace Banco.Migrations
 
                     b.HasIndex("UsuarioIdB");
 
-                    b.ToTable("Amizade");
+                    b.ToTable("Amizades");
                 });
 
             modelBuilder.Entity("Dominio.Arrecadacao", b =>
@@ -116,6 +116,8 @@ namespace Banco.Migrations
 
                     b.Property<string>("Categoria");
 
+                    b.Property<int?>("ContatoId");
+
                     b.Property<DateTime>("Data");
 
                     b.Property<string>("Descricao");
@@ -135,6 +137,8 @@ namespace Banco.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ArrecadacaoId");
+
+                    b.HasIndex("ContatoId");
 
                     b.HasIndex("DoacaoId");
 
@@ -389,6 +393,10 @@ namespace Banco.Migrations
                     b.HasOne("Dominio.Arrecadacao", "Arrecadacao")
                         .WithMany()
                         .HasForeignKey("ArrecadacaoId");
+
+                    b.HasOne("Dominio.Contato", "Contato")
+                        .WithMany()
+                        .HasForeignKey("ContatoId");
 
                     b.HasOne("Dominio.Doacao", "Doacao")
                         .WithMany()

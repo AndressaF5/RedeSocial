@@ -7,11 +7,16 @@ using Dominio;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Newtonsoft.Json;
+using System.Security.Claims;
+using Banco;
+using System.Linq;
 
 namespace RedeSocial.Controllers
 {
     public class UsuarioController : Controller
     {
+        RedeSocialDbContext _context = new RedeSocialDbContext(); 
+
         // GET: Usuario
         public async Task<IActionResult> Index()
         {
@@ -72,18 +77,30 @@ namespace RedeSocial.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nome,Sobrenome,NomeSocial,DataNascimento,CPF,Genero")] Usuario usuario)
+        public async Task<IActionResult> Create([Bind("Id,Nome,Sobrenome,NomeSocial,DataNascimento,CPF,Genero, Contato")] Usuario usuario)
         {
             if (ModelState.IsValid)
             {
                 using (var client = new HttpClient())
                 {
-                    client.BaseAddress = new Uri("https://localhost:44302/");
-                    string stringData = JsonConvert.SerializeObject(usuario);
-                    var contentData = new StringContent(stringData, System.Text.Encoding.UTF8, "application/json");
-                    HttpResponseMessage response = client.PostAsync("api/UsuarioAPI", contentData).Result;
-                    ViewBag.Message = response.Content.ReadAsStringAsync().Result;
-                    return RedirectToAction(nameof(Index));
+                    
+                    var ApplicationUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+                    var ApplicationUser = _context.Users.FirstOrDefault(u => u.Id == ApplicationUserId);
+                    var usuarioLogado = _context.Usuarios.FirstOrDefault(u => u.IdentityUser.Id == ApplicationUserId);
+                    usuario.IdentityUser = ApplicationUser;
+                    if (usuarioLogado == null)
+                    {
+                        _context.Add(usuario);
+                    }
+                    else
+                    {
+                        usuarioLogado.Nome = usuario.Nome;
+                        usuarioLogado.Sobrenome = usuario.Sobrenome;
+
+                        _context.Entry(usuarioLogado).State = EntityState.Modified;
+                    }
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("Index", "Home");
                 }
 
             }

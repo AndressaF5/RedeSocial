@@ -7,6 +7,7 @@ namespace Banco
     public class RedeSocialDbContext : IdentityDbContext
     {
         public DbSet<Arrecadacao> Arrecadacoes { get; set; }
+        public DbSet<Amizade> Amizades { get; set; }
         public DbSet<Contato> Contatos { get; set; }
         public DbSet<Doacao> Doacoes { get; set; }
         public DbSet<Endereco> Enderecos { get; set; }
