@@ -5,73 +5,89 @@
 }
 
 <h2>Index</h2>
+<head>
+    <style>
+        table, th, td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
 
+        th, td {
+            padding: 5px;
+        }
+
+        th {
+            background-color: black
+        }
+    </style>
+</head>
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
+<table style="width:100%">
     <thead>
         <tr>
-            <th>
+            <th style="color:aliceblue">
                 @Html.DisplayNameFor(model => model.Nome)
             </th>
-            <th>
+            <th style="color:aliceblue">
                 @Html.DisplayNameFor(model => model.Sobrenome)
             </th>
-            <th>
+            <th style="color:aliceblue">
                 @Html.DisplayNameFor(model => model.NomeSocial)
             </th>
-            <th>
+            <th style="color:aliceblue">
                 @Html.DisplayNameFor(model => model.DataNascimento)
             </th>
-            <th>
+            <th style="color:aliceblue">
                 @Html.DisplayNameFor(model => model.CPF)
             </th>
-            <th>
+            <th style="color:aliceblue">
                 @Html.DisplayNameFor(model => model.Genero)
             </th>
-            <th>
+            <th style="color:aliceblue">
                 @Html.DisplayNameFor(model => model.Contato.Celular)
             </th>
-            <th>
+            <th style="color:aliceblue">
                 @Html.DisplayNameFor(model => model.Contato.Telefone)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nome)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Sobrenome)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NomeSocial)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DataNascimento)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CPF)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Genero)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Contato.Celular)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Contato.Telefone)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Sobrenome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NomeSocial)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DataNascimento)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CPF)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Genero)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Contato.Celular)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Contato.Telefone)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

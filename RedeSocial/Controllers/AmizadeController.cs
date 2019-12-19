@@ -12,10 +12,11 @@ namespace RedeSocial.Controllers
     public class AmizadeController : Controller
     {
         RedeSocialDbContext _context = new RedeSocialDbContext();
-        Usuario usuario = new Usuario();
 
         public Usuario VerificaUsuario()
         {
+            Usuario usuario = new Usuario();
+
             var ApplicationUserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             var ApplicationUser = _context.Users.FirstOrDefault(u => u.Id == ApplicationUserId);
             var usuarioLogado = _context.Usuarios.FirstOrDefault(u => u.IdentityUser.Id == ApplicationUserId);
@@ -27,32 +28,35 @@ namespace RedeSocial.Controllers
         // GET: Amizade
         public async Task<IActionResult> Index()
         {
-            var usuarioLogado = VerificaUsuario(); 
-            foreach (var item in _context.Usuarios)
+            var amizade = new Amizade();
+            var usuarioLogado = VerificaUsuario();
+            var UsuarioA = usuarioLogado;
+            foreach (var item in _context.Amizades)
             {
-                if(usuarioLogado != null)
+                if (usuarioLogado != null)
                 {
-                    _context.Usuarios.Remove(usuarioLogado);
                     ViewData["UsuarioIdB"] = new SelectList(_context.Usuarios, "Id", "Nome");
                 }
                 else
                 {
                     VerificaUsuario();
                 }
-                
+
             }
 
-            var redeSocialDbContext = _context.Amizades.Include(a => a.UsuarioA).Include(a => a.UsuarioB);
-            return View(await redeSocialDbContext.ToListAsync());
+            var Amizades = _context.Amizades.Where(a => a.UsuarioIdA == UsuarioA.Id).Include(a => a.UsuarioA).Include(a => a.UsuarioB);
+            return View(Amizades);
         }
 
         // GET: Amizade/Details/5
         public async Task<IActionResult> Details(int? id, int id2)
         {
-            if (id == null & id2 == null)
-            {
-                return NotFound();
-            }
+            var usuarioLogado = VerificaUsuario();
+            var UsuarioIdA = usuarioLogado;
+            //if (id == null & id2 == null)
+            //{
+            //    return NotFound();
+            //}
 
             var amizade = await _context.Amizades
                 .Include(a => a.UsuarioA)
@@ -81,6 +85,11 @@ namespace RedeSocial.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("UsuarioIdA,UsuarioIdB")] Amizade amizade)
         {
+            var usuarioLogado = VerificaUsuario();
+            var UsuarioIdA = usuarioLogado.Id;
+            amizade.UsuarioIdA = UsuarioIdA;
+
+
             if (ModelState.IsValid)
             {
                 _context.Add(amizade);
@@ -95,11 +104,6 @@ namespace RedeSocial.Controllers
         // GET: Amizade/Edit/5
         public async Task<IActionResult> Edit(int? id, int id2)
         {
-            if (id == null && id2 == null)
-            {
-                return NotFound();
-            }
-
             var amizade = await _context.Amizades.FindAsync(id, id2);
             if (amizade == null)
             {
@@ -117,6 +121,9 @@ namespace RedeSocial.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("UsuarioIdA,UsuarioIdB")] Amizade amizade)
         {
+            var usuarioLogado = VerificaUsuario();
+            var UsuarioIdA = usuarioLogado;
+
             if (id != amizade.UsuarioIdA)
             {
                 return NotFound();
@@ -150,10 +157,10 @@ namespace RedeSocial.Controllers
         // GET: Amizade/Delete/5
         public async Task<IActionResult> Delete(int? id, int id2)
         {
-            if (id == null & id2 == null)
-            {
-                return NotFound();
-            }
+            //if (id == null & id2 == null)
+            //{
+            //    return NotFound();
+            //}
 
             var amizade = await _context.Amizades
                 .Include(a => a.UsuarioA)
@@ -170,9 +177,11 @@ namespace RedeSocial.Controllers
         // POST: Amizade/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id, int id2)
+        public async Task<IActionResult> DeleteConfirmed(int UsuarioIdA, int UsuarioIdB)
         {
-            var amizade = await _context.Amizades.FindAsync(id, id2);
+            var usuarioLogado = VerificaUsuario();
+
+            var amizade = await _context.Amizades.FindAsync(UsuarioIdA, UsuarioIdB);
             _context.Amizades.Remove(amizade);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
